@@ -1,0 +1,170 @@
+\documentclass[12pt]{article}  
+\usepackage{graphicx}
+\usepackage{geometry}   %设置页边距的宏包
+\usepackage{algpseudocode}
+\usepackage{comment}
+\usepackage{amsmath, amssymb, amsthm, mathdots}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{framed}
+\usepackage{verbatim}
+\usepackage{microtype}
+\usepackage{kpfonts}
+\usepackage{multicol}
+\usepackage{amsfonts}
+\usepackage{array}
+\usepackage{color}
+\newcommand{\solu}{{\color{blue} Solution:}}
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+\newcommand{\Ib}{\mathbf{I}}
+\newcommand{\Pb}{\mathbf{P}}
+\newcommand{\Qb}{\mathbf{Q}}
+\newcommand{\Rbf}{\mathbf{R}}
+\newcommand{\Rbb}{\mathbb{R}}
+\newcommand{\Nb}{\mathbf{N}}
+\newcommand{\Fb}{\mathbf{F}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\Lap}{\mathcal{L}}
+\newcommand{\Zplus}{\mathbf{Z}^+}
+\newcommand{\Ubf}{\mathbf{U}}
+\newcommand{\Upmb}{\pmb{U}}
+\newcommand{\Ipmb}{\mathbf{I}}
+\geometry{left=2cm,right=2cm,top=1.5cm,bottom=2cm}  %设置 上、左、下、右 页边距
+
+\title{DS4400 HW1}
+\date{}
+\author{Xin Guan}
+
+\begin{document}
+\maketitle
+\begin{enumerate}
+    \item Let $a \in \Rbb^n$ be an $n$-dimensional vector and let $\Upmb \in \Rbb^{n \times n}$ be an orthonormal matrix, i.e., $\Upmb^{T} \Upmb = \Upmb \Upmb^{T} = \Ipmb_n$. show the following:
+          \begin{enumerate}
+              \item trace($\pmb{a}\pmb{a}^T$) = $||\pmb{a}||^2_2$
+
+                    \solu
+                    \begin{proof}
+                        Let $\pmb{a} = <a_1, a_2, a_3 \dots a_n>$
+
+                        Then,
+                        $
+                            \pmb{a}\pmb{a}^T=
+                            \begin{bmatrix}
+                                a_{1}  \\
+                                a_{2}  \\
+                                \vdots \\
+                                a_{n}
+                            \end{bmatrix} \cdot
+                            \begin{bmatrix}
+                                a_{1} & a_2 & \cdots & a_n
+                            \end{bmatrix}
+                            =
+                            \begin{bmatrix}
+                                a_1 \cdot a_1 & a_1 \cdot a_2 & \dots  & a_1 \cdot a_n \\
+                                a_2 \cdot a_1 & a_2 \cdot a_2 & \dots  & a_2 \cdot a_n \\
+                                \vdots        & \ddots        &        & \vdots        \\
+                                \vdots        &               & \ddots & \vdots        \\
+                                a_n \cdot a_1 & a_n \cdot a_2 & \dots  & a_n \cdot a_n
+                            \end{bmatrix}
+                        $
+
+                        Therefore, trace($\pmb{a}\pmb{a}^T$) = $a_1 \cdot a_1 + a_2 \cdot a_2 + \cdots + a_n \cdot a_n$ = $\sum_{i = 1}^{n} a_i^2$ = $||\pmb{a}||^2_2$
+
+                        Thus, trace($\pmb{a}\pmb{a}^T$) = $||\pmb{a}||^2_2$
+                    \end{proof}
+
+              \item $||\Upmb \pmb{a}||_2^2$ = $||\pmb{a}||_2^2$
+
+                    \solu
+                    \begin{proof}
+
+                        We can write $\Upmb$ as follow:
+
+                        $
+                            \Upmb =
+                            \begin{bmatrix}
+                                $---$ v_1^T $---$ \\
+                                $---$ v_2^T $---$ \\
+                                \dots             \\
+                                $---$ v_n^T $---$
+                            \end{bmatrix}
+                        $, where $v_i \in \Rbb^n, i\in \Z, 1 \le i \le n$.
+
+                        Since $\Upmb$ is orthonormal, we have:\\
+                        $\forall i \ne k, v_i * v_k = \overrightarrow{\pmb{0}}$\\
+                        $\forall i\in \Z, 1 \le i \le n, v_i^T v_i = 1$
+
+                        Then, we can write $\Upmb\pmb{a} =
+                            \begin{bmatrix}
+                                v_1^T \pmb{a} \\
+                                v_2^T \pmb{a} \\
+                                \dots         \\
+                                v_n^T \pmb{a}
+                            \end{bmatrix}$
+
+                        Therefore, $||\Upmb\pmb{a}|| = (v_1^T\pmb{a})^2 + (v_2^T\pmb{a})^2 + \dots + (v_n^T\pmb{a})^2 \\
+                            = \sum_{i = 1}^n (v_i^T\pmb{a}) = \sum_{i = 1}^n (v_i^T\pmb{a})^T(v_i^T\pmb{a}) = \sum_{i = 1}^n (\pmb{a}^Tv_i)(v_i^T\pmb{a}) \\
+                            = \sum_{i = 1}^n (\pmb{a}^T(v_iv_i^T)\pmb{a})$ \\
+                        Since $\forall i\in \Z, 1 \le i \le n, v_i^T v_i = 1$, we have:\\
+                        $\sum_{i = 1}^n (\pmb{a}^T(v_iv_i^T)\pmb{a}) = \sum_{i = 1}^n (\pmb{a}^T\pmb{a}) = ||\pmb{a}||^2_2$
+
+                        Thus, $||\Upmb \pmb{a}||_2^2$ = $||\pmb{a}||_2^2$.
+                    \end{proof}
+          \end{enumerate}
+
+    \item Let $\pmb{A} \in \Rbb^{n\times n}$ and $\pmb{B} \in \Rbb^{n\times n}$ be arbitrary but invertible matrices and let $\alpha$ be a scalar. Show the following:
+
+          \begin{enumerate}
+              \item $(\pmb{A}\pmb{B})^{-1} = \pmb{B}^{-1}\pmb{A}^{-1}$
+
+                    \solu
+
+                    \begin{proof}
+                        By the definition of inverse, we have: $$(\pmb{A}\pmb{B})(\pmb{A}\pmb{B})^{-1} = \pmb{I}_n$$
+                        Multiply both sides by $\pmb{A}^{-1}$: $$\pmb{A}^{-1}\pmb{A}\pmb{B}(\pmb{A}\pmb{B})^{-1} = \pmb{A}^{-1}\pmb{I}_n$$
+                        Then we have: $$\pmb{B}(\pmb{A}\pmb{B})^{-1} = \pmb{A}^{-1}$$
+                        Multiply both sides by $\pmb{B}^{-1}$: $$\pmb{B}^{-1}\pmb{B}(\pmb{A}\pmb{B})^{-1} = \pmb{B}^{-1}\pmb{A}^{-1}$$
+                        Then we have: $$(\pmb{A}\pmb{B})^{-1} = \pmb{B}^{-1}\pmb{A}^{-1}$$
+                        Therefore, $(\pmb{A}\pmb{B})^{-1} = \pmb{B}^{-1}\pmb{A}^{-1}$
+                    \end{proof}
+
+
+
+              \item $(\pmb{A}^T)^{-1} = (\pmb{A}^{-1})^T$
+
+                    \solu
+
+                    \begin{proof}
+                        By the definition of inverse, we have $\pmb{A}^{-1}\pmb{A} = \pmb{I}_n$. Then we transpose both sides:
+                        $$(\pmb{A}^{-1}\pmb{A})^T = (\pmb{I}_n)^T$$
+                        Then we have: $$\pmb{A}^T(\pmb{A}^{-1})^T = \pmb{I}_n$$
+                        Multiply both sides by $(\pmb{A}^T)^{-1}$:
+                        $$(\pmb{A}^T)^{-1}\pmb{A}^T(\pmb{A}^{-1})^T = (\pmb{A}^T)^{-1}\pmb{I}_n$$
+                        Then we have: $$(\pmb{A}^{-1})^T = (\pmb{A}^T)^{-1}$$
+                    \end{proof}
+
+              \item trace($\alpha \pmb{A}) = \alpha$ trace($\pmb{A}$)
+
+                    \solu 
+                    \begin{proof}
+                        Let $\pmb{A} = \begin{bmatrix}
+                            a_{11} & a_{12} & \dots & a_{1n}\\
+                            a_{21} & a_{22} & \dots & a_{2n}\\
+                            \vdots & \ddots &  & \vdots\\
+                            a_{11} & a_{12} & \dots & a_{1n}
+                        \end{bmatrix}$\\
+                        Then $\alpha\pmb{A} = \begin{bmatrix}
+                            \alpha a_{11} & \alpha a_{12} & \dots & \alpha a_{1n}\\
+                            \alpha a_{21} & \alpha a_{22} & \dots & \alpha a_{2n}\\
+                            \vdots & \ddots &  & \vdots\\
+                            \alpha a_{11} & \alpha a_{12} & \dots & \alpha a_{nn}
+                        \end{bmatrix}$\\
+                        Then, trace($\alpha\pmb{A}$) = $\alpha a_{11} + \alpha a_{22} + \dots \alpha a_{nn} = \sum_{i = 1}^n \alpha a_{ii} = \alpha\sum_{i = 1}^n  a_{ii}$\\
+                        On the other hand, $\alpha$ trace($\pmb{A}$) = $\alpha \cdot (a_{11} + a_{22} + \dots a_{nn}) = \alpha\sum_{i = 1}^n  a_{ii}$
+
+                        Therefore, trace($\alpha \pmb{A}) = \alpha$ trace($\pmb{A}$)
+                    \end{proof}
+                    
+          \end{enumerate}
+\end{enumerate}
+\end{document}
