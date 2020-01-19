@@ -1,4 +1,5 @@
-\documentclass[12pt]{article}  
+\documentclass[12pt]{article}
+
 \usepackage{graphicx}
 \usepackage{geometry}   %设置页边距的宏包
 \usepackage{algpseudocode}
@@ -29,7 +30,7 @@
 \newcommand{\Ubf}{\mathbf{U}}
 \newcommand{\Upmb}{\pmb{U}}
 \newcommand{\Ipmb}{\mathbf{I}}
-\geometry{left=2cm,right=2cm,top=1.5cm,bottom=2cm}  %设置 上、左、下、右 页边距
+\geometry{left=1.5cm,right=1.5cm,top=1.5cm,bottom=2cm}  %设置 上、左、下、右 页边距
 
 \title{DS4400 HW1}
 \date{}
@@ -38,13 +39,18 @@
 \begin{document}
 \maketitle
 \begin{enumerate}
-    \item Let $a \in \Rbb^n$ be an $n$-dimensional vector and let $\Upmb \in \Rbb^{n \times n}$ be an orthonormal matrix, i.e., $\Upmb^{T} \Upmb = \Upmb \Upmb^{T} = \Ipmb_n$. show the following:
+    \item Let $\pmb{a} \in \Rbb^n$ be an $n$-dimensional vector and let $\Upmb \in \Rbb^{n \times n}$ be an orthonormal matrix, i.e., $\Upmb^{T} \Upmb = \Upmb \Upmb^{T} = \Ipmb_n$. show the following:
           \begin{enumerate}
               \item trace($\pmb{a}\pmb{a}^T$) = $||\pmb{a}||^2_2$
 
                     \solu
                     \begin{proof}
-                        Let $\pmb{a} = <a_1, a_2, a_3 \dots a_n>$
+                        Let $\pmb{a} = \begin{bmatrix}
+                            a_1 \\ 
+                            a_2 \\
+                            \dots \\ 
+                            a_n
+                        \end{bmatrix}$
 
                         Then,
                         $
@@ -83,30 +89,28 @@
                         $
                             \Upmb =
                             \begin{bmatrix}
-                                $---$ v_1^T $---$ \\
-                                $---$ v_2^T $---$ \\
-                                \dots             \\
-                                $---$ v_n^T $---$
+                                v_1 & v_2 & \dots & v_n
                             \end{bmatrix}
                         $, where $v_i \in \Rbb^n, i\in \Z, 1 \le i \le n$.
 
+                        We can write $\pmb{a} = \begin{bmatrix}
+                            a_1 \\ a_2 \\ \vdots \\ a_n
+                        \end{bmatrix}$, where $a_i \in \Rbb, 1 \le i \le n$
+
                         Since $\Upmb$ is orthonormal, we have:\\
-                        $\forall i \ne k, v_i * v_k = \overrightarrow{\pmb{0}}$\\
+                        $\forall i \ne k, v_iv_k = \overrightarrow{\pmb{0}}$\\
                         $\forall i\in \Z, 1 \le i \le n, v_i^T v_i = 1$
 
                         Then, we can write $\Upmb\pmb{a} =
                             \begin{bmatrix}
-                                v_1^T \pmb{a} \\
-                                v_2^T \pmb{a} \\
-                                \dots         \\
-                                v_n^T \pmb{a}
+                                v_1a_1 + v_2a_2 + \dots + v_na_n
                             \end{bmatrix}$
 
-                        Therefore, $||\Upmb\pmb{a}|| = (v_1^T\pmb{a})^2 + (v_2^T\pmb{a})^2 + \dots + (v_n^T\pmb{a})^2 \\
-                            = \sum_{i = 1}^n (v_i^T\pmb{a}) = \sum_{i = 1}^n (v_i^T\pmb{a})^T(v_i^T\pmb{a}) = \sum_{i = 1}^n (\pmb{a}^Tv_i)(v_i^T\pmb{a}) \\
-                            = \sum_{i = 1}^n (\pmb{a}^T(v_iv_i^T)\pmb{a})$ \\
+                        Therefore, $||\Upmb\pmb{a}||^2_2 = (v_1a_1)^2 + (v_2a_2)^2 + \dots + (v_na_n)^2 \\
+                            = \sum_{i = 1}^n (v_i^Ta_i)^2 = \sum_{i = 1}^n (v_ia_i)^T(v_ia_i) = \sum_{i = 1}^n (a_i^Tv_i)(v_i^Ta_i) \\
+                            = \sum_{i = 1}^n (a_i^T(v_iv_i^T)a_i)$ \\
                         Since $\forall i\in \Z, 1 \le i \le n, v_i^T v_i = 1$, we have:\\
-                        $\sum_{i = 1}^n (\pmb{a}^T(v_iv_i^T)\pmb{a}) = \sum_{i = 1}^n (\pmb{a}^T\pmb{a}) = ||\pmb{a}||^2_2$
+                        $\sum_{i = 1}^n (a_i^T(v_iv_i^T)a_i) = \sum_{i = 1}^n (a_i^Ta_i) = ||\pmb{a}||^2_2$
 
                         Thus, $||\Upmb \pmb{a}||_2^2$ = $||\pmb{a}||_2^2$.
                     \end{proof}
@@ -165,6 +169,103 @@
                         Therefore, trace($\alpha \pmb{A}) = \alpha$ trace($\pmb{A}$)
                     \end{proof}
                     
+                    
+          \end{enumerate}
+          \item For vectors $\pmb{x} \in \Rbb^n, \pmb{a} \in \Rbb^n$ and matrices $\pmb{X}\in \Rbb^{n \times n}, \pmb{A} \in \Rbb^{n \times n}$, show the following:
+          \begin{enumerate}
+            \item $\frac{\partial \pmb{a}^T\pmb{Ax}}{\partial \pmb{x}} = \pmb{A}^T\pmb{a}$
+            
+            \solu 
+
+            We write $\pmb{A}$ as follow: 
+            $\pmb{A} = \begin{bmatrix}
+                v_1 & v_2 & \dots & v_n \\
+            \end{bmatrix}$, where $v_i \in \Rbb^n \forall i \in \Z, 1\le i \le n$
+
+            Then $\pmb{a}^T\pmb{A} = 
+            \begin{bmatrix}
+                \pmb{a}^Tv_1 & \pmb{a}^Tv_2 & \dots &\pmb{a}^Tv_n
+            \end{bmatrix}$
+
+            We write $\pmb{x}$ as follow:
+            $\begin{bmatrix}
+                x_1 \\
+                x_2 \\
+                \dots \\
+                x_n
+            \end{bmatrix}$
+
+            Then $\pmb{a}^T\pmb{Ax} = \begin{bmatrix}
+                \pmb{a}^Tv_1x_1 & \pmb{a}^Tv_2x_2 & \dots &\pmb{a}^Tv_nx_n
+            \end{bmatrix}$
+
+            Then $\frac{\partial \pmb{a}^T\pmb{Ax}}{\partial \pmb{x}} = 
+            \begin{bmatrix}
+                \pmb{a}^Tv_1 \\ \pmb{a}^Tv_2 \\ \dots \\ \pmb{a}^Tv_n
+            \end{bmatrix}$
+
+            $\pmb{A}^T\pmb{a} = \begin{bmatrix}
+                v_1^T \\
+                v_2^T \\
+                \dots \\
+                v_n^T \\
+            \end{bmatrix} \pmb{a} =
+            \begin{bmatrix}
+                v_1^T\pmb{a} \\
+                v_2^T\pmb{a} \\
+                \dots \\
+                v_n^T\pmb{a}
+            \end{bmatrix} = 
+            \begin{bmatrix}
+                \pmb{a}^Tv_1 \\ \pmb{a}^Tv_2 \\ \dots \\ \pmb{a}^Tv_n
+            \end{bmatrix}
+            $
+
+            Therefore, $\frac{\partial \pmb{a}^T\pmb{Ax}}{\partial \pmb{x}} = \pmb{A}^T\pmb{a}$
+            
+            \item $\frac{\partial trace(\pmb{A}^T\pmb{X})}{\partial \pmb{X}} = \pmb{A}$ 
+            
+            \solu 
+
+            we write $\pmb{A} = \begin{bmatrix}
+                a_{11} & a_{12} & \dots & a_{1n} \\
+                a_{21} & a_{22} & \dots & a_{2n} \\
+                \vdots & \ddots &  & \vdots \\
+                a_{n1} & a_{n2} & \dots & a_{nn}
+            \end{bmatrix}, \pmb{X} = 
+            \begin{bmatrix}
+                x_{11} & x_{12} & \dots & x_{1n} \\
+                x_{21} & x_{22} & \dots & x_{2n} \\
+                \vdots & \ddots &  & \vdots \\
+                x_{n1} & x_{n2} & \dots & x_{nn}
+            \end{bmatrix}$\\
+            Then, $\pmb{A}^T\pmb{X} = 
+            \begin{bmatrix}
+                \sum_{i = 1}^n a_{i1}x_{i1} & \sum_{i = 1}^n a_{i1}x_{i2} & \dots & \sum_{i = 1}^n a_{i1}x_{in}\\
+                \sum_{i = 1}^n a_{i2}x_{i1} & \sum_{i = 1}^n a_{i2}x_{i2} & \dots & \sum_{i = 1}^n a_{i2}x_{in} \\
+                \vdots & \ddots &  & \vdots \\
+                \sum_{i = 1}^n a_{in}x_{i1} & \sum_{i = 1}^n a_{in}x_{i2}& \dots  &  \sum_{i = 1}^n a_{in}x_{in}
+            \end{bmatrix}$\\
+            trace$(\pmb{A}^T\pmb{X}) = \sum_{i = 1}^n a_{i1}x_{i1} + \sum_{i = 1}^n a_{i2}x_{i2}  + \dots \sum_{i = 1}^n a_{in}x_{in} = \sum_{j = 1}^{n}\sum_{i = 1}^{n} a_{ij}x_{ij}$
+
+            Then, $\frac{\partial trace(\pmb{A}^T\pmb{X})}{\partial \pmb{X}} =
+            \begin{bmatrix}
+                a_{11} & a_{12} & \dots & a_{1n} \\
+                a_{21} & a_{22} & \dots & a_{2n} \\
+                \vdots & \ddots &  & \vdots \\
+                a_{n1} & a_{n2} & \dots & a_{nn} \\
+            \end{bmatrix} = \pmb{A}
+            $ 
+
+            Therefore, $\frac{\partial trace(\pmb{A}^T\pmb{X})}{\partial \pmb{X}} = \pmb{A}$ 
+            
+            \item $\frac{\partial ||\pmb{Ax}||^2}{\partial x} = 2\pmb{A}^T \pmb{A}$
+              
+          \end{enumerate}
+
+          \item Determine whether each of the following functions is convex or not.
+          \begin{enumerate}
+              \item 
           \end{enumerate}
 \end{enumerate}
 \end{document}
