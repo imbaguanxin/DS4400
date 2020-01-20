@@ -180,7 +180,7 @@
             We write $\pmb{A}$ as follow: 
             $\pmb{A} = \begin{bmatrix}
                 v_1 & v_2 & \dots & v_n \\
-            \end{bmatrix}$, where $v_i \in \Rbb^n \forall i \in \Z, 1\le i \le n$
+            \end{bmatrix}$, where $v_i \in \Rbb^n, \forall i \in \Z, 1\le i \le n$
 
             Then $\pmb{a}^T\pmb{A} = 
             \begin{bmatrix}
@@ -193,11 +193,10 @@
                 x_2 \\
                 \dots \\
                 x_n
-            \end{bmatrix}$
+            \end{bmatrix}$, where $x_i \in \Rbb, \forall i \in \Z, 1\le i \le n$
 
-            Then $\pmb{a}^T\pmb{Ax} = \begin{bmatrix}
-                \pmb{a}^Tv_1x_1 & \pmb{a}^Tv_2x_2 & \dots &\pmb{a}^Tv_nx_n
-            \end{bmatrix}$
+            Then $\pmb{a}^T\pmb{Ax} = 
+                \pmb{a}^Tv_1x_1 + \pmb{a}^Tv_2x_2 + \dots + \pmb{a}^Tv_nx_n$
 
             Then $\frac{\partial \pmb{a}^T\pmb{Ax}}{\partial \pmb{x}} = 
             \begin{bmatrix}
