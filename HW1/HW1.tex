@@ -258,13 +258,48 @@
 
             Therefore, $\frac{\partial trace(\pmb{A}^T\pmb{X})}{\partial \pmb{X}} = \pmb{A}$ 
             
-            \item $\frac{\partial ||\pmb{Ax}||^2}{\partial x} = 2\pmb{A}^T \pmb{A}$
+            \item $\frac{\partial ||\pmb{Ax}||^2}{\partial x} = 2\pmb{A}^T \pmb{A}\pmb{x}$
               
           \end{enumerate}
 
           \item Determine whether each of the following functions is convex or not.
           \begin{enumerate}
-              \item 
+            \item $f(x) = (x-a)^2$, for any real number $a$.
+              
+            \solu
+
+            Since this function is $\mathbb{R} \Rightarrow \mathbb{R}$, we can calculate its second order derivative to determine whether it is convex.
+
+            $f'(x) = 2(x - a)$ \\
+            $f''(x) = 2 \ge 0$
+
+            Therefore, $f(x) = (x-a)^2$ is convex.
+
+            \item $f(x) = -log(2x)$, with the domain $x \in (0,+\infty)$.
+              
+            \solu
+
+            Since this function is $\mathbb{R} \Rightarrow \mathbb{R}$, we can calculate its second order derivative to determine whether it is convex.
+
+            $f'(x) = -\frac{1}{x}$\\
+            $f''(x) = \frac{1}{x^2} \ge 0$
+
+            Therefore, $f(x) = -log(2x)$ is convex.
+
+            \item $f(x) = e^{g(x)}$, where $g(x)$ is convex.
+              
+            \solu
+            
+            Since this function is $\mathbb{R} \Rightarrow \mathbb{R}$, we can calculate its second order derivative to determine whether it is convex.
+
+            $f'(x) = e^{g(x)}g'(x)$\\
+            $f''(x) = e^{g(x)}[g'(x)]^2 + e^{g(x)}g''(x)$\\
+            Since $g(x)$ is convex, $g''(x) \ge 0$.\\
+            And $e^{g(x)}[g'(x)]^2 \ge 0$, $e^{g(x)} \ge 0$.\\
+            Then, $e^{g(x)}[g'(x)]^2 + e^{g(x)}g''(x) \ge 0$
+            
+            Therefore, $f(x) = e^{g(x)}$ is convex.
+              
           \end{enumerate}
 \end{enumerate}
 \end{document}
