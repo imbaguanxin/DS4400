@@ -1,0 +1,145 @@
+\documentclass[12pt]{article}  
+\usepackage{graphicx}
+\usepackage{geometry}   %设置页边距的宏包
+\usepackage{algpseudocode}
+\usepackage{comment}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{framed}
+\usepackage{verbatim}
+\usepackage{microtype}
+\usepackage{kpfonts}
+\usepackage{multicol}
+\usepackage{amsfonts}
+\usepackage{array}
+\usepackage{color}
+\newcommand{\solu}{{\color{blue} Solution:}}
+\newcommand{\theo}{{\color{blue} Theorem: $\ $}}
+\newcommand{\defi}{{\color{blue} Definition: $\ $}}
+\newcommand{\recall}{{\color{blue} Recall: $\ $}}
+\newcommand{\exe}{{\color{green} Exercise: $\ $}}
+\newcommand{\prop}{{\color{blue} Prop: $\ $}}
+
+\newcommand{\hw}{{\color{red} Homework: $\ $}}
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+\newcommand{\Ib}{\mathbf{I}}
+\newcommand{\Pb}{\mathbf{P}}
+\newcommand{\Qb}{\mathbf{Q}}
+\newcommand{\Rb}{\mathbf{R}}
+\newcommand{\Nb}{\mathbf{N}}
+\newcommand{\Fb}{\mathbf{F}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\Lap}{\mathcal{L}}
+\newcommand{\Zplus}{\mathbf{Z}^+}
+\geometry{left=2cm,right=2cm,top=1.5cm,bottom=2cm}  %设置 上、左、下、右 页边距
+
+\title{DS4400 Notes}
+\date{}
+\author{Xin Guan}
+
+\begin{document}
+    \maketitle
+
+    \begin{multicols}{2}
+        \begin{enumerate}
+            \item Convex functions:
+            
+            A function $f:\mathbb{R}^d \rightarrow \mathbb{R}$ is convex iff $\forall \theta_1, \theta_2 \in \mathbb{R}^d $ and $\forall \alpha \in [0,1]$ we have 
+            $f(\alpha\theta_1 + (1-\alpha)\theta_2) \le \alpha f(\theta_1) + (1-\alpha)f(\theta_2)$
+    
+            In the special case $(d=1) \ f:\mathbb{R}\rightarrow \mathbb{{R}}$, $f$ is convex iff $\forall \theta, f''(\theta) \ge 0$
+
+            When the function is convex, \textbf{local min} $\equiv$ \textbf{global min}. When the system is not convex, we might find only a \textbf{local min} but not a \textbf{global min}
+
+            \item Dealing with non convex function:
+            
+            In gradient descent: 
+            \begin{enumerate}
+                \item use larger $\rho$ in the beginning and gradually decrease $\rho$ with interation.
+                \item Run SGD/GD with multiple random initializaitons $\theta_1^{(0)}, \theta_2^{(0)} \dots $ and keep the best solution.
+            \end{enumerate}
+
+            \item $\min_{\theta} \sum_{i = 1}^N (y_i - \theta^Tx_i)^2 \triangleq J(\theta)$ 
+            
+            In linear regression, $J(\theta)$ is convex.
+
+            \item Robustness of Regression to outliers:
+            
+            \begin{enumerate}
+                \item Run outlier detection algorithm, remove detected outliers, then run Linear Regression on remaining points.
+                \item Robust Regression cost function.
+                
+                $\min_{\theta} \sum_{i = 1}^{N} e_i^2, \ e_i \triangleq y_i - \theta^T x_i$
+
+                $e^2$ is extremly unhappy with large errors.
+
+                we might use $|e|$ to replace the function. This might be more tolerance. Then, $\min_{\theta} \sum_{i = 1}^N |y_i - \theta^T x_i|$
+            \end{enumerate}
+            
+            \item \exe D = \{$(x_1, y_1 = 100) \dots (x_10, y_10 = 100), (x_{11}, y_{11} = 0),  (x_{12}, y_{12} = 0)$\}
+            
+            $e^2$: $10(\theta - 100)^2 + 2\theta^2 \rightarrow \\ \frac{\partial}{\partial \theta} = 20(\theta - 100) + 4\theta = 0 \rightarrow \\ \theta = 83.3$
+
+            $|e|: \min_{\theta} \sum_{i = 1}^{12} |\theta - y_i|  = 10| \theta - 100 | + 2\theta \\
+             (\theta \le 100) = \min_{\theta} 10(100 - \theta) + 2\theta \\
+             = 1000 - 8\theta \rightarrow \theta = 100\\
+             (\theta \ge 100) = \min_{\theta} 10(\theta - 100) + 2\theta \\
+             = 12\theta - 1000 \rightarrow \theta = 100 $
+            
+             \item How to solve l1-norms cost functions?
+             
+             \begin{enumerate}
+                 \item No closed form
+                 \item we need to be careful with gradient descent
+                 \item We need to use convex programming toolboxs (convex optimizations)
+             \end{enumerate}
+
+             \item Huber loss funct
+             $$
+                l_{\delta} (e) = \left\{ 
+                    \begin{array}{rcl}
+                        \frac{1}{2}e^2 & & |e| \le \delta \\
+                        \delta |e| - \frac{{\delta}^2}{2} & & |e| \ge \delta
+                    \end{array} 
+                    \right.
+             $$
+
+             $$
+             \frac{\partial l_{\delta}(e)}{\partial e} = 
+             \left\{
+                 \begin{array}{rcl}
+                    e & & -\delta \le e le \delta\\
+                    \delta & & e > \delta\\
+                    -\delta & & e < \delta
+                 \end{array}
+             \right.
+             $$
+
+             in huber loss function, we don't have closed form solution but we can run gredient descent now.
+
+             \item \defi Overfitting: 
+             
+             Learning a system from traning data that does very well on training data itself (e.g, very low regression error on traning data), but performs poorly on test data.
+
+             \item \defi Overfitting in Linear Regression
+             
+             $\Phi^T \Phi \theta = \Phi^T Y \\ 
+             \Rightarrow \theta^* = (\Phi^T \Phi)^{-1} \Phi^T Y$
+
+             rank$(\Phi^T \Phi) \le \min \{rk(\Phi^T), rk(\Phi)\} = rk(\Phi) \le \min\{N,d\}$
+
+             $\Phi^T\Phi$ is $d\times d$ matrix, then rank is $\le d$.
+
+             Therefore, when $N < d$ it is not invertible which means we have multiple solutions and results in overfitting.
+
+
+
+
+        \end{enumerate}
+        \newpage
+    \end{multicols}
+
+    \newpage
+    
+\end{document}
