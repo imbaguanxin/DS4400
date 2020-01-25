@@ -109,10 +109,14 @@
                             \end{bmatrix}$
 
                         Therefore, $||\Upmb\pmb{a}||^2_2 = (v_1a_1)^2 + (v_2a_2)^2 + \dots + (v_na_n)^2 \\
-                            = \sum_{i = 1}^n (v_i^Ta_i)^2 = \sum_{i = 1}^n (v_ia_i)^T(v_ia_i) = \sum_{i = 1}^n (a_i^Tv_i)(v_i^Ta_i) \\
-                            = \sum_{i = 1}^n (a_i^T(v_iv_i^T)a_i)$ \\
+                            = \sum_{i = 1}^n (v_i^Ta_i)^2 \\
+                            = \sum_{i = 1}^n (v_ia_i)^T(v_ia_i) \\
+                            = \sum_{i = 1}^n (a_iv_i^T)(v_ia_i) \\
+                            = \sum_{i = 1}^n (a_i(v_i^Tv_i)a_i)$ \\
                         Since $\forall i\in \Z, 1 \le i \le n, v_i^T v_i = 1$, we have:\\
-                        $\sum_{i = 1}^n (a_i^T(v_iv_i^T)a_i) = \sum_{i = 1}^n (a_i^Ta_i) = ||\pmb{a}||^2_2$
+                        $\sum_{i = 1}^n (a_i(v_i^Tv_i)a_i) \\
+                        = \sum_{i = 1}^n (a_ia_i) \\
+                        = ||\pmb{a}||^2_2$
 
                         Thus, $||\Upmb \pmb{a}||_2^2$ = $||\pmb{a}||_2^2$.
                     \end{proof}
@@ -200,12 +204,12 @@
             Then $\pmb{a}^T\pmb{Ax} = 
                 \pmb{a}^Tv_1x_1 + \pmb{a}^Tv_2x_2 + \dots + \pmb{a}^Tv_nx_n$
 
-            Then $\frac{\partial \pmb{a}^T\pmb{Ax}}{\partial \pmb{x}} = 
+            Then, on the left hand side: $\frac{\partial \pmb{a}^T\pmb{Ax}}{\partial \pmb{x}} = 
             \begin{bmatrix}
                 \pmb{a}^Tv_1 \\ \pmb{a}^Tv_2 \\ \dots \\ \pmb{a}^Tv_n
             \end{bmatrix}$
 
-            $\pmb{A}^T\pmb{a} = \begin{bmatrix}
+            On the right hand side: $\pmb{A}^T\pmb{a} = \begin{bmatrix}
                 v_1^T \\
                 v_2^T \\
                 \dots \\
@@ -247,7 +251,8 @@
                 \vdots & \ddots &  & \vdots \\
                 \sum_{i = 1}^n a_{in}x_{i1} & \sum_{i = 1}^n a_{in}x_{i2}& \dots  &  \sum_{i = 1}^n a_{in}x_{in}
             \end{bmatrix}$\\
-            trace$(\pmb{A}^T\pmb{X}) = \sum_{i = 1}^n a_{i1}x_{i1} + \sum_{i = 1}^n a_{i2}x_{i2}  + \dots \sum_{i = 1}^n a_{in}x_{in} = \sum_{j = 1}^{n}\sum_{i = 1}^{n} a_{ij}x_{ij}$
+            trace$(\pmb{A}^T\pmb{X}) = \sum_{i = 1}^n a_{i1}x_{i1} + \sum_{i = 1}^n a_{i2}x_{i2}  + \dots \sum_{i = 1}^n a_{in}x_{in} \\
+            = \sum_{j = 1}^{n}\sum_{i = 1}^{n} a_{ij}x_{ij}$
 
             Then, $\frac{\partial trace(\pmb{A}^T\pmb{X})}{\partial \pmb{X}} =
             \begin{bmatrix}
@@ -286,10 +291,12 @@
             = (a_{11}x_1 + a_{12}x_2 + \dots + a_{1n}x_n)^2 + (a_{21}x_1 + a_{22}x_2 + \dots + a_{2n}x_n)^2 + \dots + (a_{n1}x_1 + a_{n2}x_2 + \dots + a_{nn}x_n)^2 \\
             = (\sum_{i = 1}^n a_{1i}x_i)^2 + (\sum_{i = 1}^n a_{2i}x_i)^2 \dots + (\sum_{i = 1}^n a_{ni}x_i)^2 \\$
 
-            Then $\frac{\partial ||\pmb{Ax}||^2}{\partial x} = \frac{\partial [(\sum_{i = 1}^n a_{1i}x_i)^2 + (\sum_{i = 1}^n a_{2i}x_i)^2 \dots + (\sum_{i = 1}^n a_{ni}x_i)^2 ]}{\partial x} \\
-            = \frac{\partial (\sum_{i = 1}^n a_{1i}x_i)^2}{\partial x} + \frac{\partial (\sum_{i = 1}^n a_{2i}x_i)^2}{\partial x} + \dots + \frac{\partial (\sum_{i = 1}^n a_{ni}x_i)^2}{\partial x} \\
-            = 2(\sum_{i = 1}^n a_{1i}x_i)\frac{\partial (\sum_{i = 1}^n a_{1i}x_i)}{\partial x} + 2(\sum_{i = 1}^n a_{2i}x_i)\frac{\partial (\sum_{i = 1}^n a_{2i}x_i)}{\partial x} + \dots + 2(\sum_{i = 1}^n a_{ni}x_i)\frac{\partial (\sum_{i = 1}^n a_{ni}x_i)}{\partial x} \\
-            = 2(\sum_{i = 1}^n a_{1i}x_i)\begin{bmatrix}
+            Then on the left hand side: \\
+            $$\frac{\partial ||\pmb{Ax}||^2}{\partial x} $$
+            $$= \frac{\partial [(\sum_{i = 1}^n a_{1i}x_i)^2 + (\sum_{i = 1}^n a_{2i}x_i)^2 \dots + (\sum_{i = 1}^n a_{ni}x_i)^2 ]}{\partial x} $$
+            $$= \frac{\partial (\sum_{i = 1}^n a_{1i}x_i)^2}{\partial x} + \frac{\partial (\sum_{i = 1}^n a_{2i}x_i)^2}{\partial x} + \dots + \frac{\partial (\sum_{i = 1}^n a_{ni}x_i)^2}{\partial x} $$
+            $$= 2(\sum_{i = 1}^n a_{1i}x_i)\frac{\partial (\sum_{i = 1}^n a_{1i}x_i)}{\partial x} + 2(\sum_{i = 1}^n a_{2i}x_i)\frac{\partial (\sum_{i = 1}^n a_{2i}x_i)}{\partial x} + \dots + 2(\sum_{i = 1}^n a_{ni}x_i)\frac{\partial (\sum_{i = 1}^n a_{ni}x_i)}{\partial x} $$
+            $$= 2(\sum_{i = 1}^n a_{1i}x_i)\begin{bmatrix}
                 a_{11}\\ a_{12} \\ \dots \\ a_{1n}
             \end{bmatrix} + 
             2(\sum_{i = 1}^n a_{2i}x_i)\begin{bmatrix}
@@ -297,83 +304,116 @@
             \end{bmatrix} + \dots + 
             2(\sum_{i = 1}^n a_{ni}x_i)\begin{bmatrix}
                 a_{n1}\\ a_{n2} \\ \dots \\ a_{nn}
-            \end{bmatrix} \\
-            = 2 \begin{bmatrix}
-                (\sum_{i = 1}^n a_{1i}x_i) a_{11} + (\sum_{i = 1}^n a_{2i}x_i) a_{21} \dots + (\sum_{i = 1}^n a_{ni}x_i) a_{n1} \\
-                (\sum_{i = 1}^n a_{1i}x_i) a_{12} + (\sum_{i = 1}^n a_{2i}x_i) a_{22} \dots + (\sum_{i = 1}^n a_{ni}x_i) a_{n2} \\
+            \end{bmatrix} $$
+            $$= 2 \begin{bmatrix}
+                (\sum_{i = 1}^n a_{1i}x_i) a_{11} + (\sum_{i = 1}^n a_{2i}x_i) a_{21} + \dots + (\sum_{i = 1}^n a_{ni}x_i) a_{n1} \\
+                (\sum_{i = 1}^n a_{1i}x_i) a_{12} + (\sum_{i = 1}^n a_{2i}x_i) a_{22} + \dots + (\sum_{i = 1}^n a_{ni}x_i) a_{n2} \\
+                \vdots \\
+                (\sum_{i = 1}^n a_{1i}x_i) a_{1n} + (\sum_{i = 1}^n a_{2i}x_i) a_{2n} + \dots + (\sum_{i = 1}^n a_{ni}x_i) a_{nn} \\
+            \end{bmatrix} \\$$
+            On right hand side: \\
+            $$2\pmb{A^TAx} = 2\pmb{A^T}(\pmb{Ax})$$
+            $$= 2\begin{bmatrix}
+                a_{11} & a_{21} & \dots & a_{n1} \\
+                a_{12} & a_{22} & \dots & a_{n2} \\
+                \vdots & \ddots &  & \vdots \\
+                a_{1n} & a_{2n} & \dots & a_{nn} \\
+            \end{bmatrix}
+            \begin{bmatrix}
+                a_{11}x_1 + a_{12}x_2 + \dots + a_{1n}x_n \\
+                a_{21}x_1 + a_{22}x_2 + \dots + a_{2n}x_n \\
                 \dots \\
-                (\sum_{i = 1}^n a_{1i}x_i) a_{1n} + (\sum_{i = 1}^n a_{2i}x_i) a_{2n} \dots + (\sum_{i = 1}^n a_{ni}x_i) a_{nn} \\
-            \end{bmatrix} \\
-            = 2\begin{bmatrix}
-                (\sum_{i = 1}^{n} a_{i1}a_{i1})x_1 + (\sum_{i = 1}^{n} a_{i2}a_{i1})x_2 + \dots + (\sum_{i = 1}^{n} a_{in}a_{i1})x_n \\
-                (\sum_{i = 1}^{n} a_{i1}a_{i2})x_1 + (\sum_{i = 1}^{n} a_{i2}a_{i2})x_2 + \dots + (\sum_{i = 1}^{n} a_{in}a_{i2})x_n \\
+                a_{n1}x_1 + a_{n2}x_2 + \dots + a_{nn}x_n \\
+            \end{bmatrix} $$
+            $$= 2\begin{bmatrix}
+                a_{11} & a_{21} & \dots & a_{n1} \\
+                a_{12} & a_{22} & \dots & a_{n2} \\
+                \vdots & \ddots &  & \vdots \\
+                a_{1n} & a_{2n} & \dots & a_{nn} \\
+            \end{bmatrix}
+            \begin{bmatrix}
+                \sum_{i = 1}^n a_{1i}x_i \\
+                \sum_{i = 1}^n a_{2i}x_i  \\
                 \dots \\
-                (\sum_{i = 1}^{n} a_{i1}a_{in})x_1 + (\sum_{i = 1}^{n} a_{i2}a_{in})x_2 + \dots + (\sum_{i = 1}^{n} a_{in}a_{in})x_n \\
-            \end{bmatrix}$
+                \sum_{i = 1}^n a_{ni}x_i \\
+            \end{bmatrix} $$
+            $$= 2\begin{bmatrix}
+                (\sum_{i = 1}^n a_{1i}x_i)\cdot a_{11} + (\sum_{i = 1}^n a_{2i}x_i)\cdot a_{21} + \dots + (\sum_{i = 1}^n a_{ni}x_i)\cdot a_{n1} \\
+                (\sum_{i = 1}^n a_{1i}x_i)\cdot a_{12} + (\sum_{i = 1}^n a_{2i}x_i)\cdot a_{22} + \dots + (\sum_{i = 1}^n a_{ni}x_i)\cdot a_{n2} \\
+                \vdots \\
+                (\sum_{i = 1}^n a_{1i}x_i)\cdot a_{1n} + (\sum_{i = 1}^n a_{2i}x_i)\cdot a_{2n} + \dots + (\sum_{i = 1}^n a_{ni}x_i)\cdot a_{nn}
+            \end{bmatrix}$$
 
-            If we write $\pmb{A}$ as $\begin{bmatrix}
-                v_1 & v_2 & \dots & v_n
-            \end{bmatrix}$ 
+            % = 2\begin{bmatrix}
+            %     (\sum_{i = 1}^{n} a_{i1}a_{i1})x_1 + (\sum_{i = 1}^{n} a_{i2}a_{i1})x_2 + \dots + (\sum_{i = 1}^{n} a_{in}a_{i1})x_n \\
+            %     (\sum_{i = 1}^{n} a_{i1}a_{i2})x_1 + (\sum_{i = 1}^{n} a_{i2}a_{i2})x_2 + \dots + (\sum_{i = 1}^{n} a_{in}a_{i2})x_n \\
+            %     \dots \\
+            %     (\sum_{i = 1}^{n} a_{i1}a_{in})x_1 + (\sum_{i = 1}^{n} a_{i2}a_{in})x_2 + \dots + (\sum_{i = 1}^{n} a_{in}a_{in})x_n \\
+            % \end{bmatrix}$
+
+            % If we write $\pmb{A}$ as $\begin{bmatrix}
+            %     v_1 & v_2 & \dots & v_n
+            % \end{bmatrix}$ 
             
-            where $v_i = \begin{bmatrix}
-                a_{1i} \\ a_{2i} \\ a_{3i} \\ \dots \\ a_{ni}
-            \end{bmatrix}$
+            % where $v_i = \begin{bmatrix}
+            %     a_{1i} \\ a_{2i} \\ a_{3i} \\ \dots \\ a_{ni}
+            % \end{bmatrix}$
 
-            Then we can write the expression above as $2\begin{bmatrix}
-                v_1^T v_1 x_1 + v_2^T v_1 x_2 + \dots v_n^T v_1 x_n \\
-                v_1^T v_2 x_1 + v_2^T v_2 x_2 + \dots v_n^T v_2 x_n \\
-                \dots \\
-                v_1^T v_n x_1 + v_2^T v_n x_2 + \dots v_n^T v_n x_n \\
-            \end{bmatrix}$
+            % Then we can write the expression above as $2\begin{bmatrix}
+            %     v_1^T v_1 x_1 + v_2^T v_1 x_2 + \dots v_n^T v_1 x_n \\
+            %     v_1^T v_2 x_1 + v_2^T v_2 x_2 + \dots v_n^T v_2 x_n \\
+            %     \dots \\
+            %     v_1^T v_n x_1 + v_2^T v_n x_2 + \dots v_n^T v_n x_n \\
+            % \end{bmatrix}$
 
-            Therefore, $\frac{\partial ||\pmb{Ax}||^2}{\partial x} =2\begin{bmatrix}
-                v_1^T v_1 x_1 + v_2^T v_1 x_2 + \dots v_n^T v_1 x_n \\
-                v_1^T v_2 x_1 + v_2^T v_2 x_2 + \dots v_n^T v_2 x_n \\
-                \dots \\
-                v_1^T v_n x_1 + v_2^T v_n x_2 + \dots v_n^T v_n x_n \\
-            \end{bmatrix}$
+            % Therefore, $\frac{\partial ||\pmb{Ax}||^2}{\partial x} =2\begin{bmatrix}
+            %     v_1^T v_1 x_1 + v_2^T v_1 x_2 + \dots v_n^T v_1 x_n \\
+            %     v_1^T v_2 x_1 + v_2^T v_2 x_2 + \dots v_n^T v_2 x_n \\
+            %     \dots \\
+            %     v_1^T v_n x_1 + v_2^T v_n x_2 + \dots v_n^T v_n x_n \\
+            % \end{bmatrix}$
 
-            on the right hand side: $2\pmb{A}^T \pmb{A}\pmb{x} = 2
-            \begin{bmatrix}
-                v_1 & v_2 & \dots & v_n
-            \end{bmatrix}^T
-            \begin{bmatrix}
-                v_1 & v_2 & \dots & v_n
-            \end{bmatrix}
-            \begin{bmatrix}
-                x_1 \\ x_2 \\ \dots \\ x_n
-            \end{bmatrix} \\
-            = 2
-            \begin{bmatrix}
-                v_1^T \\ v_2^T \\ \dots \\ v_n^T
-            \end{bmatrix}
-            \begin{bmatrix}
-                v_1 & v_2 & \dots & v_n
-            \end{bmatrix}
-            \begin{bmatrix}
-                x_1 \\ x_2 \\ \dots \\ x_n
-            \end{bmatrix}\\
-            = 2 \begin{bmatrix}
-                v_1^Tv_1 & v_1^Tv_2 & \dots & v_1^Tv_n \\
-                v_2^Tv_1 & v_2^Tv_2 & \dots & v_2^Tv_n \\
-                \vdots & \cdots & \cdots & \vdots\\
-                v_n^Tv_1 & v_n^Tv_2 & \dots & v_n^Tv_n \\
-            \end{bmatrix}
-            \begin{bmatrix}
-                x_1 \\ x_2 \\ \dots \\ x_n
-            \end{bmatrix}\\
-            = 2 \begin{bmatrix}
-                v_1^Tv_1x_1 & v_1^Tv_2x_2 & \dots & v_1^Tv_nx_n \\
-                v_2^Tv_1x_1 & v_2^Tv_2x_2 & \dots & v_2^Tv_nx_n \\
-                \vdots & \cdots & \cdots & \vdots\\
-                v_n^Tv_1x_1 & v_n^Tv_2x_2 & \dots & v_n^Tv_nx_n \\
-            \end{bmatrix}\\
-            = 2 \begin{bmatrix}
-                v_1^Tv_1x_1 & v_2^Tv_1x_2 & \dots & v_n^Tv_1x_n \\
-                v_1^Tv_2x_1 & v_2^Tv_2x_2 & \dots & v_n^Tv_2x_n \\
-                \vdots & \cdots & \cdots & \vdots\\
-                v_1^Tv_nx_1 & v_2^Tv_nx_2 & \dots & v_n^Tv_nx_n \\
-            \end{bmatrix}$
+            % on the right hand side: $2\pmb{A}^T \pmb{A}\pmb{x} = 2
+            % \begin{bmatrix}
+            %     v_1 & v_2 & \dots & v_n
+            % \end{bmatrix}^T
+            % \begin{bmatrix}
+            %     v_1 & v_2 & \dots & v_n
+            % \end{bmatrix}
+            % \begin{bmatrix}
+            %     x_1 \\ x_2 \\ \dots \\ x_n
+            % \end{bmatrix} \\
+            % = 2
+            % \begin{bmatrix}
+            %     v_1^T \\ v_2^T \\ \dots \\ v_n^T
+            % \end{bmatrix}
+            % \begin{bmatrix}
+            %     v_1 & v_2 & \dots & v_n
+            % \end{bmatrix}
+            % \begin{bmatrix}
+            %     x_1 \\ x_2 \\ \dots \\ x_n
+            % \end{bmatrix}\\
+            % = 2 \begin{bmatrix}
+            %     v_1^Tv_1 & v_1^Tv_2 & \dots & v_1^Tv_n \\
+            %     v_2^Tv_1 & v_2^Tv_2 & \dots & v_2^Tv_n \\
+            %     \vdots & \cdots & \cdots & \vdots\\
+            %     v_n^Tv_1 & v_n^Tv_2 & \dots & v_n^Tv_n \\
+            % \end{bmatrix}
+            % \begin{bmatrix}
+            %     x_1 \\ x_2 \\ \dots \\ x_n
+            % \end{bmatrix}\\
+            % = 2 \begin{bmatrix}
+            %     v_1^Tv_1x_1 & v_1^Tv_2x_2 & \dots & v_1^Tv_nx_n \\
+            %     v_2^Tv_1x_1 & v_2^Tv_2x_2 & \dots & v_2^Tv_nx_n \\
+            %     \vdots & \cdots & \cdots & \vdots\\
+            %     v_n^Tv_1x_1 & v_n^Tv_2x_2 & \dots & v_n^Tv_nx_n \\
+            % \end{bmatrix}\\
+            % = 2 \begin{bmatrix}
+            %     v_1^Tv_1x_1 & v_2^Tv_1x_2 & \dots & v_n^Tv_1x_n \\
+            %     v_1^Tv_2x_1 & v_2^Tv_2x_2 & \dots & v_n^Tv_2x_n \\
+            %     \vdots & \cdots & \cdots & \vdots\\
+            %     v_1^Tv_nx_1 & v_2^Tv_nx_2 & \dots & v_n^Tv_nx_n \\
+            % \end{bmatrix}$
             
             Thus, left part equals right part.
 
@@ -400,7 +440,8 @@
             Since this function is $\mathbb{R} \Rightarrow \mathbb{R}$, we can calculate its second order derivative to determine whether it is convex.
 
             $f'(x) = -\frac{1}{x}$\\
-            $f''(x) = \frac{1}{x^2} \ge 0$
+            $f''(x) = \frac{1}{x^2}$\\
+            since $x \in (0, +\infty),  f''(x) \ge 0$
 
             Therefore, $f(x) = -log(2x)$ is convex.
 
