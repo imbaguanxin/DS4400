@@ -36,12 +36,14 @@
 
 \title{DS4400 Notes}
 \date{}
-\author{Xin Guan}
+\author{}
 
 \begin{document}
     \maketitle
 
     \begin{multicols}{2}
+        \title{DS4400 Notes 01/24}
+        \maketitle
         \begin{enumerate}
             \item Convex functions:
             
@@ -132,10 +134,99 @@
              $\Phi^T\Phi$ is $d\times d$ matrix, then rank is $\le d$.
 
              Therefore, when $N < d$ it is not invertible which means we have multiple solutions and results in overfitting.
+        \end{enumerate}
+        \title{DS4400 Notes 01/28}
+        \maketitle
+        \begin{enumerate}
+            \item \defi Overfitting\\
+            Refers to situation where the learned model does well on traning data and poorly on testing data.\\
+            As $d$ (dimension of system) increases, then training error godes down (can be exactly ZERO for sufficiently large d)
 
+            \item In Linear regression:\\
+            $$\min \sum_{i = 1}^n (\theta^T \phi(x_i) - y_i)^2$$ set the derivative to 0 and we find $$\Phi^T \Phi \theta = \Phi^T Y$$ Then $\theta^* = (\Phi^T \Phi)^{-1}\Phi^T Y$
 
+            \textbf{When is it the case that $\Phi^T\Phi$ is not invertible?}
+            
+            Since $\Phi^T \Phi \in \mathbb{R}^{N\times d}$ 
+            $$rk(\Phi^T \Phi) \le rk(\Phi) \le min\{N,d\}$$
 
+            $\Phi^T \Phi \in \Rb^{d \times d}$ is invertible when $rk(\Phi^T \Phi) = d$. Therefore, when $N < d, rk(\Phi^T \Phi) = N$, $\Phi^T \Phi $ is not invertible. There will be infinitely many solutions for $\theta$.
 
+            \textbf{Generally, need sufficient \# samples}
+
+            \item Test overfitting.\\
+            If $\Phi^T \Phi$ is not invertible,\\
+            $\exists v \ne 0 , \Phi^T \Phi v = 0$\\
+            $\Rightarrow \theta^* + \alpha v$ is also a solution for any $\alpha \in R$\\
+            $\Phi^T \Phi (\theta^* + \alpha v) = \Phi^T \Phi \theta^* + \Phi^T \Phi (\alpha v) \\ = \Phi^T \Phi \theta^* + \alpha \Phi^T \Phi v \\ = \Phi^T \Phi \theta^* = \Phi^T Y$
+
+            We can find large $\alpha$ so that $\theta^*$ have extremly large entries.
+
+            \textbf{Generally, if the entries are very large (abs) we might have overfitting}
+
+            \item Treat overfitting\\
+            We want to change regreession optimization to prevent $\theta$ from very large terms.
+
+            then we change the cost function:
+
+            $$\min_{\theta} \sum_{i = 1}^{N}(\theta^T\phi(x_i) - y_i)^2 + \lambda \sum_{j = 1}^d \theta_j^2$$
+
+            $\lambda$: regularization parameter $(> 0)$\\
+            $\sum_{j = 1}^d \theta_j^2$: regularizer.\\      
+            $\lambda \rightarrow 0$: back to overfitting \\
+            $\lambda \rightarrow \infty: \theta^* = 0$, underfitting
+            \begin{enumerate}
+                \item closed-form \\
+                    $\frac{\partial J}{\partial \theta} \\
+                    = 2 \Phi^T(\Phi \theta - Y) + \lambda \frac{\partial \sum_{j = 1}^N \theta_j^2}{\partial \theta} \\
+                    = 2\Phi^T(\Phi \theta - Y) + 2\lambda \theta$\\
+                    Let it be zero:
+                    $$\Phi^T \Phi \theta + \lambda \theta = \Phi^T Y$$
+                    $$(\Phi^T \Phi + \lambda I_d )\theta = \Phi^T Y$$
+                    Then $\theta^* = (\Phi^T \Phi + \lambda I_d )^{-1}\Phi^T Y$
+                \item Gradient descent \\
+                    Find initial $\theta^{(0)}$\\
+                    $\theta^{t} = \theta^{(t-1)} - \rho \frac{\partial J}{\partial \theta}|_{\theta^{(t-1)}} \\
+                    = \theta^{(t-1)} - 2\Phi^T(\Phi \theta^{(t-1)} - Y) + 2\lambda \theta^{(t-1)}$
+            \end{enumerate}
+
+            \item Hyperparameter Tunning
+            
+            GD: set learning rate $\rho$
+
+            Robust Reg: Huber loss $\delta$
+
+            overfitting and regularization: $\lambda$
+
+            $\rho, \delta, \lambda = $ hyperparameters
+
+            \textbf{How to pick hyperparameters?}
+
+            \textbf{BAD APPROACH 1:}
+
+            \begin{enumerate}
+                \item pick some set of possible $\lambda_i \in \{\lambda_1, \lambda_2 \dots\}$
+                
+                Run regression with $\lambda_i$ and find $\theta^*_i$
+
+                Measure regression error:
+
+                $$\epsilon_{tr}(\lambda) = \sum_{i=1}^N ((\theta^*(\lambda))^T x_i - y_i)^2$$
+
+                To sum: just find $\lambda$ for which $\epsilon_{tr}(\lambda)$ is minimum
+            \end{enumerate}
+
+            \textbf{This approach is setting $\lambda$ back to 0}
+
+            \textbf{Test data needed!!!}
+
+            \begin{enumerate}
+                \item We need to Train $\lambda_i$ on \textbf{training set} to minimize the cost function $$2\Phi^T(\Phi \theta - Y) + 2\lambda \theta$$ to find $\theta^*_i$
+                \item Measure regression error on the \textbf{hold-out set} $D^{ho}$
+                $$\epsilon_{tr} = \sum_{x_i,y_i \in D^{ho} } (y_i - (\theta^*(\lambda))^Tx_i)^2$$
+
+            \end{enumerate}
+            
         \end{enumerate}
         \newpage
     \end{multicols}
