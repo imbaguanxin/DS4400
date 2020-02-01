@@ -32,6 +32,7 @@
 \newcommand{\Z}{\mathbf{Z}}
 \newcommand{\Lap}{\mathcal{L}}
 \newcommand{\Zplus}{\mathbf{Z}^+}
+\newcommand{\indep}{\perp \!\!\! \perp}
 \geometry{left=2cm,right=2cm,top=1.5cm,bottom=2cm}  %设置 上、左、下、右 页边距
 
 \title{DS4400 Notes}
@@ -142,7 +143,8 @@
             Refers to situation where the learned model does well on traning data and poorly on testing data.\\
             As $d$ (dimension of system) increases, then training error godes down (can be exactly ZERO for sufficiently large d)
 
-            \item In Linear regression:\\
+            \item In Linear regression:
+            
             $$\min \sum_{i = 1}^n (\theta^T \phi(x_i) - y_i)^2$$ set the derivative to 0 and we find $$\Phi^T \Phi \theta = \Phi^T Y$$ Then $\theta^* = (\Phi^T \Phi)^{-1}\Phi^T Y$
 
             \textbf{When is it the case that $\Phi^T\Phi$ is not invertible?}
@@ -226,8 +228,89 @@
                 $$\epsilon_{tr} = \sum_{x_i,y_i \in D^{ho} } (y_i - (\theta^*(\lambda))^Tx_i)^2$$
 
             \end{enumerate}
-            
         \end{enumerate}
+        \title{DS4400 Notes 01/31}
+        \maketitle
+
+        \begin{enumerate}
+            \item Hyperparameter Tunning:
+            $$\min_{\theta} \sum_{i = 1}^{N}(\theta^T\phi(x_i) - y_i)^2 + \lambda \sum_{j = 1}^d \theta_j^2$$
+
+            \begin{itemize}
+                \item For $\lambda \in \{\lambda_1, \lambda_2 \dots, \lambda_p\}$
+                \begin{itemize}
+                    \item Tran using $D^{tr}$ with $\lambda \rightarrow \theta^*(\lambda)$
+                    \item Measure validation error $$\epsilon^{tr}(\lambda) = \sum_{x_i,y_i \in D^{ho} } (y_i - (\theta^*(\lambda))^Tx_i)^2$$
+                \end{itemize}
+                \item select $\lambda$ which minimizes $$\epsilon^{ho}(\lambda)  \rightarrow \lambda^* =  \min_{\{\lambda_1, \lambda_2 \dots, \lambda_p\}}\epsilon^{ho}(\lambda)$$
+            \end{itemize}
+
+            \item Problems:
+            \begin{itemize}
+                \item Take much longer time since we are training the models multiple times
+                \item Each training is using a subset of the data set, then each training is amplifing the problem of overfitting.
+            \end{itemize}
+
+            \item K-fold cross validation
+            
+            divide Data set to k equally large sets $\{D_1, D_2, \dots, D_k\} \in D$
+
+            \begin{itemize}
+                \item For $\lambda \in \{\lambda_1, \lambda_2 \dots, \lambda_p\}$
+                \begin{itemize}
+                    \item For $i = 1,2, \dots, k$
+                    \begin{itemize}
+                        \item train on $\bigcup\limits_{j\ne i}D^j$ and get $\theta_i^*(\lambda)$
+                        \item compute validate error on $D^i \rightarrow \epsilon^{ho}_i(\lambda)$
+                    \end{itemize}
+                    \item compute average of $\{\epsilon_i^{ho}(\lambda)$\}: $\epsilon^{ho} = \frac{1}{k}\sum_{i = 1}^{k}\epsilon^{ho}(\lambda)$
+                \end{itemize}
+                \item select $\lambda^* = \min\limits_{\{\lambda_1, \lambda_2 \dots, \lambda_p\}}\epsilon^{ho}(\lambda)$
+            \end{itemize}
+
+            Once we find the best $\lambda$, train the model on the whole set.
+
+            \item PROBABILITY REVIEW
+            \begin{itemize}
+                \item Random Variable: a variable that takes values corresponding to outcome of a random phenomenon.
+                \item Discrete r.v.: descrete values
+                \item continuous r.v. continus range of values
+                \item Condition: $P(X|Y) = \frac{P(X \cap Y)}{P(Y)}$
+                $$P(X,Y) = P(X|Y)P(Y)$$
+                $$P(X,Y) = P(Y|X)P(X)$$
+                \textbf{Chain rule:} 
+                
+                $P(X_1, X_2, \dots, X_n) = P(X_1)P(X_2|X_2)P(X_3|X_1,X_2)\\ \dots P(X_N|X_1,X_2 \dots X_N) $
+
+                \item Marginalization
+                
+                $p(x,y)$ known\\
+                $p(x) = \sum\limits_y p(x, Y= y) = \int p(x,y)dy$  
+
+                \item Bayes Rule:\\
+                $P(X|Y) = \frac{P(Y|X)P(X)}{P(Y)} = \frac{P(X|Y)P(Y)}{P(X)} $
+
+                \item Independence: \\
+                r.v. are independent ($X\indep Y$) iff \\
+                $P(X|Y) = p(X), P(Y|X) = p(Y)$
+                \\or $P(x,y) =P(x)p(y)$
+                \item conditional independence
+                example: X = height of person, Y = vocabulary, X is not independent of Y since babies may have less vocabulary and with lower heights.\\
+                However, X = height, Y = vocab, Z = age. Then $(X\indep Y)\ | \ Z$
+                $$P(X,Y|Z) = P(X|Z)P(Y|Z)$$
+                $$\Rightarrow P(X|Y, Z) = P(X|Z)$$
+
+                \item Expectation:\\
+                $E(X) = \sum xp(x) $ or $\int xp(x)dx$\\
+                $E(f(X)) = \sum f(x)p(x)$ or $\int f(x)p(x)dx$\\
+                Given $X\indep Y$, $E[XY] = E[X]E[Y] $ \\
+                hint: $(E[XY] = E[f(x,y)]$
+
+                \item IID r.v: independent and identically destributed\\
+                $p(X_1= x_1, X_2 = x_2, \dots X_n = x_n) = p(X_1 = x_1)p(X_2 = x_2)\dots p(X_n = x_n)$ and each expriment is identical.\\ $P(X_1 = \theta) = P(X_2 = \theta) = \dots = P(X_n = \theta)$
+            \end{itemize}
+        \end{enumerate}
+
         \newpage
     \end{multicols}
 
