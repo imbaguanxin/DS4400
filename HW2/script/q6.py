@@ -41,20 +41,18 @@ def gradient_descent(x1_0, x2_0, max_iter, rho):
     point_list = [np.array([x1_0, x2_0, f(x1_0, x2_0)])]
     curr_point = np.array([x1_0, x2_0, 0])
     for i in range(0, max_iter):
-        new_point, new_dir = single_descent(curr_point, rho)
-        point_list += [new_point]
-        curr_point = new_point
-
+        curr_point, new_dir = single_descent(curr_point, rho)
         if np.linalg.norm(new_dir) < EPSILON:
             print("The total number of iterations is: {}".format(i + 1))
             return point_list
         elif np.abs(curr_point[0]) > 6 or np.abs(curr_point[1]) > 6:
-            print("Out of range! (x1, x2) = ({}, {})".format(curr_point[0], curr_point[1]))
+            print("Out of range! (x1, x2) = ({}, {}), iteration number: {}".format(curr_point[0], curr_point[1], i + 1))
             return point_list
         elif np.any(np.isinf(curr_point)):
             print("It reaches infinite, does not converge!\n"
                   "The total number of iterations is: {}".format(i + 1))
             return point_list
+        point_list += [curr_point]
     print("Exceeds max iteration: {}; with learning rate: {}".format(max_iter, rho))
     return point_list
 
@@ -62,8 +60,8 @@ def gradient_descent(x1_0, x2_0, max_iter, rho):
 def single_descent(point, rho):
     x1 = point[0]
     x2 = point[1]
-    dx1 = np.sin(x1) * (-4 * x1 - 3 * x2) + np.cos(x1) * (-2 * np.power(x1, 2) - 3 * x1 * x2 + 2 * np.power(x2, 2))
-    dx2 = np.sin(x1) * (4 * x2 - 3 * x2)
+    dx1 = np.sin(x1) * (-4. * x1 - 3. * x2) + np.cos(x1) * (-2. * np.power(x1, 2) - 3. * x1 * x2 + 2. * np.power(x2, 2))
+    dx2 = np.sin(x1) * (4. * x2 - 3. * x1)
     new_x1 = x1 - dx1 * rho
     new_x2 = x2 - dx2 * rho
     new_y = f(new_x1, new_x2)
@@ -71,7 +69,7 @@ def single_descent(point, rho):
 
 
 def f(x1, x2):
-    return np.sin(x1) * (-2 * np.power(x1, 2) - 3 * x1 * x2 + 2 * np.power(x2, 2))
+    return np.sin(x1) * (-2. * np.power(x1, 2) - 3. * x1 * x2 + 2. * np.power(x2, 2))
 
 
 def plot_learning_points(points):
@@ -98,11 +96,11 @@ def main():
 
     point_result1 = gradient_descent(-3, -4, MAX_ITER, 0.001)
     plot_learning_points(point_result1)
-    # print(point_result1[len(point_result1) - 5: len(point_result1)])
+    # print(point_result1)  # [len(point_result1) - 5: len(point_result1)])
 
     point_result2 = gradient_descent(4, -3, MAX_ITER, 0.001)
     plot_learning_points(point_result2)
-    # print(point_result2[len(point_result2) - 5: len(point_result2)])
+    # print(point_result2)  # print(point_result2[len(point_result2) - 5: len(point_result2)])
 
     point_result3 = gradient_descent(1, 5, MAX_ITER, 0.001)
     plot_learning_points(point_result3)
@@ -127,7 +125,7 @@ def main():
     min_points = pd.DataFrame()
     for key in data:
         min_index = data[key]['y'].idxmin()
-        # print(data[key].loc[min_index])
+        print(data[key])
         min_points = pd.concat([min_points, data[key].loc[min_index].to_frame().transpose()])
     min_points.reset_index(drop=True, inplace=True)
     min_index = min_points['y'].idxmin()
