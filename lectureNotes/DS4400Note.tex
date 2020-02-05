@@ -33,6 +33,8 @@
 \newcommand{\Lap}{\mathcal{L}}
 \newcommand{\Zplus}{\mathbf{Z}^+}
 \newcommand{\indep}{\perp \!\!\! \perp}
+\DeclareMathOperator*{\argmin}{\arg\min}
+\DeclareMathOperator*{\argmax}{\arg\max}
 \geometry{left=2cm,right=2cm,top=1.5cm,bottom=2cm}  %设置 上、左、下、右 页边距
 
 \title{DS4400 Notes}
@@ -63,7 +65,7 @@
                 \item Run SGD/GD with multiple random initializaitons $\theta_1^{(0)}, \theta_2^{(0)} \dots $ and keep the best solution.
             \end{enumerate}
 
-            \item $\min_{\theta} \sum_{i = 1}^N (y_i - \theta^Tx_i)^2 \triangleq J(\theta)$ 
+            \item $\argmin_{\theta} \sum_{i = 1}^N (y_i - \theta^Tx_i)^2 \triangleq J(\theta)$ 
             
             In linear regression, $J(\theta)$ is convex.
 
@@ -73,11 +75,11 @@
                 \item Run outlier detection algorithm, remove detected outliers, then run Linear Regression on remaining points.
                 \item Robust Regression cost function.
                 
-                $\min_{\theta} \sum_{i = 1}^{N} e_i^2, \ e_i \triangleq y_i - \theta^T x_i$
+                $\argmin_{\theta} \sum_{i = 1}^{N} e_i^2, \ e_i \triangleq y_i - \theta^T x_i$
 
                 $e^2$ is extremly unhappy with large errors.
 
-                we might use $|e|$ to replace the function. This might be more tolerance. Then, $\min_{\theta} \sum_{i = 1}^N |y_i - \theta^T x_i|$
+                we might use $|e|$ to replace the function. This might be more tolerance. Then, $\argmin_{\theta} \sum_{i = 1}^N |y_i - \theta^T x_i|$
             \end{enumerate}
             
             \item \exe D = \{$(x_1, y_1 = 100) \dots (x_10, y_10 = 100), (x_{11}, y_{11} = 0),  (x_{12}, y_{12} = 0)$\}
@@ -311,6 +313,89 @@
             \end{itemize}
         \end{enumerate}
 
+        \title{DS4400 Notes 02/04}
+        \maketitle
+
+        \textbf{Maximum Likelihood Estimation}
+        \begin{enumerate}            
+            \item Some distributions:
+            \begin{itemize}
+                \item Gaussian Dist.
+                
+                $P(X=x) = \frac{1}{\sqrt{2\pi \sigma^2}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$
+                \item Laplace Dist.
+                
+                $P(X = x) = \frac{1}{2\lambda}e^{-\frac{|x-\mu|}{\lambda}}$
+
+                \item Bernoulli Dist.
+                
+                $P_\theta(x = 1) = \theta, P_\theta(x = 0) = 1 -\theta$
+            \end{itemize}
+
+            \item Goal: Learn parameters of probability models. (fix the prob. model class)
+            
+            In ML, we learn these parameters ($\theta$) using training data, D.
+
+            We want to measure $P_\theta(D)$
+
+            MLE: $\theta^* = \argmax_{\theta}P_\theta(D)$ Under such $\theta^*$, the probability of observing the given dataset is maximum.
+
+            \item \exe Fliping a coin.
+            
+            This is a Binomial Dist. (n time Bernoulli Trials)
+            
+            model: $p(X = x) = \theta^{x}(1-\theta)^{1-x}, x = 0, 1$
+
+            $P_\theta(D) = P_\theta(X_1 = x_1, X_2 = x_2 \dots)$
+
+            Assuming that tossing coins are iids:
+
+            $P_\theta(D) = P_\theta(x_1)P_\theta(x_2) \dots\\
+            = \theta^{\sum x_i} (1-\theta)^{\sum (1-x_i)}$
+
+            Then likelihood funciton: 
+
+            $L(\theta) = P_\theta(D)$
+
+            Take the logrithm of both sides (simplify product to sum)
+
+            $\theta^* = \argmax_\theta logL(\theta)$
+
+            \textbf{REASON:} 
+            
+            1. log is monotonically increasing
+            
+            2. simplify the powers to scale, the product to sum.
+
+            3. Increase the dynamic range (working with small numbers is not accurate on computers and memory consuming)
+
+            $$\frac{\partial log L(\theta)}{\partial \theta} = \sum x_i \frac{1}{\theta} + (N - \sum x_i) \frac{-1}{1-\theta} $$
+
+            Let the derivative equals to 0.
+
+            $$\frac{1}{\theta}\sum x_i = \frac{1}{\theta -1}(N - \sum x_i)$$
+            $$\theta = \frac{\sum x_i}{N}$$
+
+            \item \exe People's height
+            
+            Use model: normal distribution.
+
+            $L(\theta)= P_{\sigma, \mu}(D) = \prod \limits_{i = 1}^{N} P_e(x_i)$
+
+            $logL(\theta) = -\frac{N}{2}log(2\pi\sigma^2) - \frac{\sum\limits_{i = 1}^{N}(x_i-\mu)^2}{2\sigma^2} = -\frac{N}{2}log(2\pi) -\frac{N}{2}log(\sigma^2) - \frac{\sum\limits_{i = 1}^{N}(x_i-\mu)^2}{2\sigma^2}$
+
+            $$\frac{\partial logL(\theta)}{\partial \mu} = -\sum_{i = 1}^N (\mu - x_i)/ \sigma^2$$
+            $$\Rightarrow \hat{\mu} =  \frac{\sum\limits_{i = 1}^{N} x_i}{N}$$
+            $$\frac{\partial log L(\theta)}{\partial \sigma^2} =-\frac{N}{2}\frac{1}{\sigma^2} - \frac{\sum\limits_{i = 1}^{N}(x_i-\mu)^2}{2} \frac{-1}{\sigma^4}$$
+            $$= \frac{-N}{2\sigma^2} + \frac{\sum\limits_{i = 1}^{N}(x_i-\mu)^2}{2\sigma^4}$$
+            $$\hat{\sigma^{2}} = \frac{1}{N}\sum_{i = 1}^{N}(x_i - \hat{\mu})^2$$
+
+
+            
+
+
+
+        \end{enumerate}
         \newpage
     \end{multicols}
 
