@@ -1,0 +1,71 @@
+\documentclass[12pt]{article}  
+\usepackage{graphicx}
+\usepackage{geometry}   %设置页边距的宏包
+\usepackage{algpseudocode}
+\usepackage{comment}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{framed}
+\usepackage{verbatim}
+\usepackage{microtype}
+\usepackage{kpfonts}
+\usepackage{multicol}
+\usepackage{amsfonts}
+\usepackage{array}
+\usepackage{color}
+\usepackage{pgf,tikz}
+\usetikzlibrary{automata, positioning, arrows}
+\usepackage{wrapfig}
+\newcommand{\solu}{{\color{blue} Solution:}}
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+\newcommand{\Ib}{\mathbf{I}}
+\newcommand{\Pb}{\mathbf{P}}
+\newcommand{\Qb}{\mathbf{Q}}
+\newcommand{\Rb}{\mathbf{R}}
+\newcommand{\Nb}{\mathbf{N}}
+\newcommand{\Fb}{\mathbf{F}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\Lap}{\mathcal{L}}
+\newcommand{\Zplus}{\mathbf{Z}^+}
+\newcommand{\indep}{\perp \!\!\! \perp}
+\DeclareMathOperator*{\argmin}{\arg\min}
+\DeclareMathOperator*{\argmax}{\arg\max}
+\geometry{left=2cm,right=2cm,top=1.5cm,bottom=2cm}  %设置 上、左、下、右 页边距
+
+\title{DS4400 HW2}
+\author{Xin Guan}
+\date{}
+
+\begin{document}
+    \maketitle
+    \begin{enumerate}
+        \item \textbf{Linear Regression:} Consider the modified linear regression problem
+        $$\hat{\theta} = \argmin_\theta \sum_{i = 1}^{N}(\mathbf{\theta}^T\phi(x_i) - y_i)^2 + \lambda||\mathbf{\theta} - \mathbf{a}||^2_2$$
+        where $a$ is a known and given vector of the same dimension as that of $\theta$. Derive the closed-form solution. Provide all steps of the derivation.
+        
+        \solu
+
+        $f(\theta) = \sum_{i = 1}^{N}(\mathbf{\theta}^T\phi(x_i) - y_i)^2 + \lambda||\mathbf{\theta} - \mathbf{a}||^2_2$\\
+        $\frac{\partial f(\theta)}{\partial \theta} = \frac{\partial \sum_{i=1}^{N} (\theta^T\phi(x_i) -y_i)^2}{\partial \theta} + \frac{\partial \lambda ||\theta - a||^2_2}{\partial \theta}$\\
+        $ = \sum_{i=1}^{N} [2(\theta^T\phi(x_i) -y_i)\frac{ \partial (\theta^T\phi(x_i) -y_i)}{\partial \theta}] +  \lambda\frac{\partial ||\theta - a||^2_2}{\partial \theta}$\\
+        $ = \sum_{i=1}^{N} [2(\theta^T\phi(x_i) -y_i) \phi(x_i)] +  \lambda\frac{\partial (\theta - a)^2}{\partial \theta}$\\
+        $\lambda\frac{\partial (\theta - a)^2}{\partial \theta} = \lambda \frac{\partial (\theta^2 - 2\theta a + a^2)}{\partial \theta} = \lambda (2\theta -2a)$  \\
+        Therefore, $\frac{\partial f(\theta)}{\partial \theta} = \sum_{i=1}^{N} [2(\theta^T\phi(x_i) -y_i) \phi(x_i)] + 2\lambda(\theta - a)$\\
+        Write all data $\phi(x_1), \phi(x_2) \dots \phi(x_N)$ as a matrix:\\
+        $\Phi = \begin{bmatrix}
+            \phi(x_1)^T \\ \phi(x_2)^T \\ \dots \\ \phi(x_N)^T
+        \end{bmatrix}$ the dimension is $N \times d$\\
+        $Y = \begin{bmatrix}
+            y_1 \\  y_2 \\ \dots \\ y_n
+        \end{bmatrix}$ the dimension is $N \times d$\\
+        Then $\frac{\partial f(\theta)}{\partial \theta} = 2(\Phi^T\Phi\theta- \Phi^T Y) - 2\lambda(\theta - a)$\\
+        Let $\frac{\partial f(\theta)}{\partial \theta} = 0$\\
+        $$\Phi^T\Phi\theta- \Phi^T Y = \lambda(\theta - a)$$
+        $$\Phi^T\Phi\theta- \Phi^T Y = \lambda I_d \theta - \lambda I_da$$
+        $$\Phi^T\Phi\theta -  \lambda I_d\theta  = \Phi^T Y  - \lambda I_da$$
+        $$(\Phi^T\Phi - \lambda I_d)\theta  = \Phi^T Y  - \lambda I_da$$
+        $$\theta= (\Phi^T\Phi - \lambda I_d)^{-1}(\Phi^T Y  - \lambda I_da)$$
+        Therefore, 
+    \end{enumerate}
+\end{document}
