@@ -390,12 +390,57 @@
             $$= \frac{-N}{2\sigma^2} + \frac{\sum\limits_{i = 1}^{N}(x_i-\mu)^2}{2\sigma^4}$$
             $$\hat{\sigma^{2}} = \frac{1}{N}\sum_{i = 1}^{N}(x_i - \hat{\mu})^2$$
 
-
-            
-
-
-
         \end{enumerate}
+        \title{DS4400 Notes 02/07}
+        \maketitle\\
+        Classification:\\
+        \textbf{Binary Classification}:\\
+         input = Email $\rightarrow$ output = 'span' vs 'non-span' \\
+        \textbf{Multiclass Classification}:\\
+        input = Image $\rightarrow$ output = 'car', 'bike', 'stop-sign', $\dots$\\
+        \begin{itemize}
+            \item \textbf{Classification Setup}:\\
+            Given a training dataset $D=\{(x_1, y_1) \cdots (x_n, y_n)\}$ where $x_i \in \mathbb{R}^d$ is input feature vector and $y_i\in \{0,1,2,\dots, L-1\}$, Find a mapping $g:\mathbb{R}^d \rightarrow \{0,1,2,\dots, L-1\}$ s.t. $g_w(x_i) = y_i$ for many i's $\in \{1,2,\dots, N\}$ 
+            \item \textbf{Assumption:}\\
+            Assume that there is a hyperplane $w^T\phi(x) =0$ that separates data into two classes. \\
+            Then set: $w^T\phi(x) > 0 \rightarrow y = 1$, set: $w^T\phi(x) < 0 \rightarrow y = 0$
+
+            \item Logistic Regression Model:\\
+            $P_w(y = 1 | x) \propto e^{w^T\phi(x)/2}$\\
+            $P_w(y = 0 | x) \propto e^{-w^T\phi(x)/2}$\\
+            Determine Z: $P_w(y = 1 | x) + P_w(y = 0 | x) = 1$:\\
+            $\frac{1}{z}e^{w^T\phi(x)/2} + \frac{1}{z} e^{-w^T\phi(x)/2} = 1$\\
+            $\rightarrow z = e^{w^T\phi(x)/2} + e^{-w^T\phi(x)/2}$\\
+            $\rightarrow P_w(y = 1 | x) = \frac{1}{z}e^{w^T\phi(x)/2} = \frac{1}{1 + e^{-w^T\phi(x)}}$\\
+
+            Model: $P_w(y = 1 | x) = \frac{1}{1 + e^{-w^T\phi(x)}}$\\
+            Model: $P_w(y = 0 | x) = 1- \frac{1}{1 + e^{-w^T\phi(x)}}$
+            \item signoid/logistic function:\\
+            $\sigma(z) = \frac{1}{1 + e^{-z}}$
+            \item Logistic regression:\\
+            $P_w(y = 1 | x) = \frac{1}{1 + e^{-w^T\phi(x)}} = \sigma(w^T\phi(x))$
+
+            \item Training: Learn $w^*$ given training data D
+            \item Testing: $P_w(y^n=1|x^n) = \frac{1}{1 + e^{-{w^*}^T\phi(x^n)}}$
+            \item Assign $P>0.5 \rightarrow class 1$, $P\le0.5 \rightarrow class 0$
+            \item Training via MLE:\\
+            $\max\limits_{w}P_w(D) = \max\limits_{w}P_w(y_1 | x_1) \cdots P_w(y_N | x_N)\\
+            = \max\limits_{w}\prod\limits_{i = 1}^{N}P_w(y_i | x_i)$ \\
+            We can write :\\
+            $P_w(y_i|x_i) = P_w(y_i = 1 | x_1)^{y_i} P_w(y_i = 0 | x_1)^{1 - y_i}$
+            Apply natural log:
+            $\max\limits_{w} logP_w(D) = \max\limits_{w}\sum_{i = 1}^{N}log[(\frac{1}{1 + e^{-w^T\phi(x_i)}})^{y_i} + (\frac{1}{1 + e^{w^T\phi(x_i)}})^{1 -y_i}]\\
+            = \max\limits_{w}\sum_{i = 1}^{N}(y_i)log(\frac{1}{1 + e^{-w^T\phi(x_i)}}) + (1 - y_i)log(\frac{1}{1 + e^{w^T\phi(x_i)}})\\
+            = \max\limits_{w}\sum_{i = 1}^{N}(y_i)[log(\frac{1}{1 + e^{-w^T\phi(x_i)}}) - log(\frac{1}{1 + e^{w^T\phi(x_i)}})] + log\frac{1}{1 + e^{w^T\phi(x_i)}}\\
+            = \max\limits_{w}\sum_{i = 1}^{N}(y_i)[log(\frac{1 + e^{w^T\phi(x_i)}}{1 + e^{-w^T\phi(x_i)}})] + log\frac{1}{1 + e^{w^T\phi(x_i)}}\\
+            \max\limits_{w}\sum_{i = 1}^{N}(y_i)[log(e^{w^T\phi(x_i)})] + log\frac{1}{1 + e^{w^T\phi(x_i)}}\\
+            = \max\limits_{w}\sum_{i = 1}^{N}(y_iw^T\phi(x_i)) - log(1 + e^{w^T\phi(x_i)})\\
+            \equiv \min\limits_{w}\sum_{i = 1}^{N}-(y_iw^T\phi(x_i)) + log(1 + e^{w^T\phi(x_i)})$\\
+            Derivative:\\
+            $\frac{\partial J}{\partial w}$
+        \end{itemize}
+        
+        
         \newpage
     \end{multicols}
 
