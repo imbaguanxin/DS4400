@@ -66,6 +66,124 @@
         $$\Phi^T\Phi\theta -  \lambda I_d\theta  = \Phi^T Y  - \lambda I_da$$
         $$(\Phi^T\Phi - \lambda I_d)\theta  = \Phi^T Y  - \lambda I_da$$
         $$\theta= (\Phi^T\Phi - \lambda I_d)^{-1}(\Phi^T Y  - \lambda I_da)$$
-        Therefore, 
+        Therefore, $\hat{\theta}$ is $(\Phi^T\Phi - \lambda I_d)^{-1}(\Phi^T Y  - \lambda I_da)$
+
+        \item \textbf{Probability and Random Variables:} State true or false. If true, prove it. If false, either prove or demonstrate by a counter example. Here $\Omega$ denotes the sample space and $A^c$ denotes the complement of the event $A$. $X$ and $Y$ denote random variables.
+        \begin{enumerate}
+            \item For any $A, B \subseteq \Omega$ such that $0 < P(A) < 1, P(A|B) + P(A|B^c) =1$
+            
+            \solu \ This is \textbf{False}
+            \begin{proof}
+                From the Question, $P(B) + P(B^c) = 1$.\\
+                $P(A|B) = \frac{P(A\cap B)}{P(B)}$, $P(A|B^c) = \frac{P(A\cap B^c )}{P(B^c)}$\\
+                Since $P(A\cap B) + P(A\cap B^c) = P(A)$ \\
+                $P(A|B) +P(A|B^c) =  \frac{P(A\cap B)}{P(B)} + \frac{P(A) - P(A\cap B)}{1 - P(B)} $\\
+                Then we let $P(B) = 0.5$, $P(A) = 0.4$ and $P(A\cap B) = 0.3$\\
+                $P(A|B) +P(A|B^c) = \frac{0.3}{0.5} + \frac{0.4 - 0.3}{1 - 0.5} = 0.6 + 0.2 = 0.8 \ne 1$
+                Therefore, the given term is False.
+            \end{proof}
+            
+            \item For any $A, B \subseteq \Omega$ $P(B^c\cap (A\cup B)) + P(A^c \cup B) = 1$
+            
+            \solu \ This is \textbf{True}
+            \begin{proof}
+                $P(B^c\cap (A\cup B)) = P((B^c \cap A)\cup (B^c \cap B)) = P((B^c \cap A)\cup \emptyset) = P(B^c \cap A)$\\
+                Therefore, $P(B^c\cap (A\cup B)) + P(A^c \cup B) = P(B^c \cap A) + P(A^c \cup B)$
+                Since $P(A) = P(A \cap B^c) + P(A \cap B)$, We can write $P(B^c \cap A) = P(A) - P(A \cap B)$\\
+                Also, we can write $P(A^c \cup B) = P(A^c) + P(B) - P(A^c \cap B)$\\
+                Then $P(B^c\cap (A\cup B)) + P(A^c \cup B) \\
+                = P(B^c \cap A) + P(A^c \cup B)\\
+                = P(A) - P(A \cap B) + P(A^c) + P(B) - P(A^c \cap B)\\
+                = P(A)+ P(A^c) + P(B) - (P(A \cap B)+ P(A^c \cap B))$\\
+                Since $P(A) + P(A^c) = 1$ and $P(A \cap B) + P(A^c \cap B) = P(B)$\\
+                $P(B^c\cap (A\cup B)) + P(A^c \cup B) = 1$
+            \end{proof}
+
+            \item $P(A_1, \dots, A_n) = P(A_1)P(A_2|A_1)P(A_3|A_1, A_2) \cdots P(A_n|A_1,\cdots,A_{n-1})$
+            
+            \solu \ This is \textbf{True}
+            \begin{proof}
+                (By induction)\\
+                \textbf{Base Case: n = 1}\\
+                When $n = 1, P(A_1, \dots, A_n) = P(A_1)$, \\
+                $ P(A_1)P(A_2|A_1)P(A_3|A_1, A_2) \cdots P(A_n|A_1,\cdots,A_{n-1}) = P(A_1)$\\
+                Therefore, when $n = 1$, $P(A_1, \dots, A_n) = P(A_1)P(A_2|A_1)P(A_3|A_1, A_2) \cdots P(A_n|A_1,\cdots,A_{n-1})$ is ture.\\
+                \textbf{Inductive Steps:}\\
+                \textit{Inductive Hypothesis:} \\
+                $P(A_1, \dots, A_n) = P(A_1)P(A_2|A_1)P(A_3|A_1, A_2) \cdots P(A_n|A_1,\cdots,A_{n-1})$ is true when $n = k$.\\
+                \textit{Claim:} \\
+                $P(A_1, \dots, A_n) = P(A_1)P(A_2|A_1)P(A_3|A_1, A_2) \cdots P(A_n|A_1,\cdots,A_{n-1})$ is true when $n = k+1$
+                \textbf{Proof of Claim:}\\
+                When n = k+1, right hand side:\\
+                $P(A_1)P(A_2|A_1)P(A_3|A_1, A_2) \cdots P(A_n|A_1,\cdots,A_{n-1})\\
+                =P(A_1)P(A_2|A_1)P(A_3|A_1, A_2) \cdots P(A_n|A_1,\cdots,A_{k-1})P(A_n|A_1,\cdots,A_{k})\\
+                = P(A_1, \dots, A_k)P(A_{k+1}|A_1,\cdots,A_{k+1-1}) \\
+                = P(A_1, \dots, A_k)\frac{P(A_{k+1}\cap A_1,\cdots,A_k)}{P(A_1,\cdots,A_k)}\\
+                = P(A_{k+1}\cap A_1,\cdots,A_k)\\
+                = P(A_1, \dots, A_{k+1})$\\
+                Therefore, the claim is true.\\
+                Thus, $P(A_1, \dots, A_n) = P(A_1)P(A_2|A_1)P(A_3|A_1, A_2) \cdots P(A_n|A_1,\cdots,A_{n-1})$ is true.
+            \end{proof}
+
+            \item If $X$ and $Y$ are independent discrete random variables, then $E[XY] = E[X]E[Y]$, where $E[\cdots]$ denotes expectation.
+            
+            \solu
+            \begin{proof}
+                $X \indep Y \Rightarrow P(XY) = P(X)P(Y)$\\
+                $E(XY) \\
+                = \sum xyP(XY) \\
+                = \sum xyP(X)P(Y)\\
+                = \sum xP(X) \sum yP(Y)\\
+                = E[X]E[Y]$
+            \end{proof}
+        \end{enumerate}
+
+        \item \textbf{Maximum Likelihood Estimation:} Assume $X_1, X_2, \dots, X_N$ are i.i.d. random variables each taking a real value, where
+        $$p_\delta(X_i = x_i) = e^{-\delta^2+\delta x_i}$$
+        Here, $\delta$ is the parameter of the distribution. Assume, we observe $X_1 = x_1, X_2 = x_2, \dots, X_N = x_N$.
+        \begin{enumerate}
+            \item Write down the likelihood function $L(\delta)$.
+            
+            \solu \\
+            $L(\delta) = \prod\limits_{i = 1}^{i = N}p_\delta(X_i = x_i) \\
+            = \prod\limits_{i = 1}^{i = N}e^{-\delta^2+\delta x_i} $
+
+            \item Derive the maximum likelihood or log-likelihood estimation of $\delta$ for the given observations. Provide all steps of derivations.
+            
+            \solu \\
+            $log(L(\delta)) = log(\prod\limits_{i = 1}^{i = N} e^{-\delta^2+\delta x_i}) \\
+            = \sum\limits_{i = 1}^{i = N} log(e^{-\delta^2+\delta x_i})\\
+            = \sum\limits_{i = 1}^{i = N} -\delta^2+\delta x_i\\
+            = -N\delta^2 + \delta\sum\limits_{i = 1}^{i = N}x_i$\\
+            Then $\frac{\partial log(L(\delta))}{\partial \delta} 
+            = \frac{\partial( -N\delta^2 + \delta\sum\limits_{i = 1}^{i = N}x_i)}{\partial \delta}
+            = -2N\delta + \sum\limits_{i = 1}^{i = N}x_i$\\
+            Let $\frac{\partial log(L(\delta))}{\partial \delta} = 0$.
+            Then, $-2N\delta + \sum\limits_{i = 1}^{i = N}x_i = 0\\
+            \Rightarrow 2N\delta = \sum\limits_{i = 1}^{i = N}x_i
+            \Rightarrow \delta = \frac{\sum\limits_{i = 1}^{i = N}x_i}{2N}$\\
+            Therefore, $\hat{\delta} = \frac{\sum\limits_{i = 1}^{i = N}x_i}{2N}$
+        \end{enumerate}
+
+        \item \textbf{Logistic Regression:} In the logistic regression for binary classification $(y \in \{0,1\})$, we defined $p(y = 1 | x) = \sigma(\omega^Tx)$, where the sigmoid function is defined as
+        $$\sigma(z) \triangleq \frac{1}{1 + e^{-z}}$$
+        Assume we have trained the logistic regression model using a given dataset and have learned $\omega$. Let $x_n$ be a test sample.
+        \begin{enumerate}
+            \item Assume $\omega^T x_n < 0.3$. To which class $x_n$ belongs? Provide details of your derivations.
+            
+            \solu\\
+            $\omega^T x_n < 0.3 \Rightarrow e^{-\omega^T x_n} > e^{-0.3}\\
+            \Rightarrow 1 + e^{-\omega^T x_n} > 1 + e^{-0.3}\\
+            \Rightarrow \frac{1}{1 + e^{-\omega^T x_n}} < \frac{1}{1 + e^{-0.3}}\\
+            \Rightarrow p(y = 1 | x) < 0.5744$
+
+            \item Assume $\frac{1}{1+e^{\omega^T x_n}} = 0.7.$ To which class $x_n$ belongs and with what probability? Provide detaisl of your derivations.
+            
+            \solu \\
+            $\frac{1}{1+e^{\omega^T x_n}} = 0.7 \Rightarrow \frac{1}{0.7} = 1 + 1+e^{\omega^T x_n} \Rightarrow e^{\omega^T x_n} = \frac{1}{0.7} -1 \Rightarrow e^{-\omega^T x_n} = \frac{1}{\frac{1}{0.7} -1} = \frac{0.7}{1-0.7} = \frac{0.7}{0.3} $\\
+            $\sigma(\omega^Tx_n) = \frac{1}{1+\frac{0.7}{0.3}} = \frac{0.3}{0.3+0.7} = 0.3$\\
+            Therefore, $p(y = 0 | x_n) = 1 - p(y = 1 | x_n) = 1-0.3 = 0/7$ \\
+            Thus, $x_n$ belongs to 0 with probability of 0.7
+        \end{enumerate}
     \end{enumerate}
 \end{document}
