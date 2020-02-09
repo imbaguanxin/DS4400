@@ -31,7 +31,7 @@
 \newcommand{\indep}{\perp \!\!\! \perp}
 \DeclareMathOperator*{\argmin}{\arg\min}
 \DeclareMathOperator*{\argmax}{\arg\max}
-\geometry{left=2cm,right=2cm,top=1.5cm,bottom=2cm}  %设置 上、左、下、右 页边距
+\geometry{left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm}  %设置 上、左、下、右 页边距
 
 \title{DS4400 HW2}
 \author{Xin Guan}
@@ -68,6 +68,78 @@
         $$\theta= (\Phi^T\Phi - \lambda I_d)^{-1}(\Phi^T Y  - \lambda I_da)$$
         Therefore, $\hat{\theta}$ is $(\Phi^T\Phi - \lambda I_d)^{-1}(\Phi^T Y  - \lambda I_da)$
 
+        \item \textbf{Robust Regression using Huber Loss:} In the class, we defined the Huber loss as 
+        $$\ell_\delta(e) = \left\{
+            \begin{array}{rcl}
+            \frac{1}{2}e^2 & & |e| \le \delta \\
+            \delta |e| - \frac{{\delta}^2}{2} & & |e| \ge \delta
+        \end{array} 
+        \right.$$
+        Consider the robust regression model
+        $$\min_\theta \sum_{i = 1}^{N}\ell_\delta(y_i - \theta^T\phi(x_i))$$
+        where $\phi(x_i)$ and $y_i$ denote the $i$-th input sample and output/response, respectivly and unknown parameter vector.\\
+        a) Provide the steps of the batch gradient descent in order to obtain the solution for $\theta$.\\
+        \solu \\
+        Let $J(\theta) = \sum_{i = 1}^{N}\ell_\delta(y_i - \theta^T\phi(x_i))$\\
+        We have : $\frac{\partial \ell_\delta(e)}{\partial e} = \left\{
+            \begin{array}{rcl}
+            e & & |e| \le \delta \\
+            \delta & & e \ge \delta \\
+            -\delta & & e \le -\delta
+        \end{array} 
+        \right.$\\
+        Therefore,
+        $\frac{\partial J(\theta)}{\partial \theta} = \frac{\sum_{i = 1}^{N}\partial \ell_\delta(y_i - \theta^T\phi(x_i))}{\partial \theta} = \sum_{i = 1}^{N}\left\{ 
+            \begin{array}{rcl}
+                [y_i-\theta^T\phi(x_i)] \cdot \phi(x_i)  & & |y_i-\theta^T\phi(x_i)| \le \delta \\
+                \delta\cdot \phi(x_i) & & y_i-\theta^T\phi(x_i) \ge \delta \\
+                -\delta\cdot \phi(x_i) & & y_i-\theta^T\phi(x_i) \le -\delta
+            \end{array} 
+        \right.$\\
+        \textbf{Gradient Descent Steps:}\\
+        Assuming we have a Maximum iteration number $T_{max}$, threshold $\epsilon$ and Learning rate $\rho$.
+        \begin{enumerate}[label=(\roman*)]
+            \item Pick the initial point $\theta^0$
+            \item For $t = 1,2, \dots, T_{max}$
+            \begin{itemize}
+                \item for $i = 1,2, \dots, N$, calculate $\frac{\partial \ell_\delta(y_i - \theta^T\phi(x_i))}{\partial \theta} = \left\{ 
+                    \begin{array}{rcl}
+                        [y_i-\theta^T\phi(x_i)] \cdot \phi(x_i)  & & |y_i-\theta^T\phi(x_i)| \le \delta \\
+                        \delta\cdot \phi(x_i) & & y_i-\theta^T\phi(x_i) \ge \delta \\
+                        -\delta\cdot \phi(x_i) & & y_i-\theta^T\phi(x_i) \le -\delta
+                    \end{array} 
+                \right.$
+                \item sum them up to get $\frac{\partial J(\theta)}{\partial \theta}$
+                \item If $||\frac{\partial J(\theta)}{\partial \theta}||_2^2 \le \epsilon$, return $\theta^{t-1}$; else, $\theta^t = \theta^{t-1} - \rho\frac{\partial J(\theta)}{\partial \theta}|_{\theta^{t-1}}$
+            \end{itemize}
+        \end{enumerate}
+
+        b) Provide the steps of the stochastic gradient descent using mini-batches of size 1, i.e., one sample in each mini-batch, inorder to obtain the solution for $\theta$
+        
+        \solu
+
+        This step is not very different from the above process. Just add a sampling step before the calculation of $\frac{\partial J(\theta)}{\partial \theta}$. In the sampling step, just randomly pick a $x_p \in \{x_1, x_2, \dots, x_N\}$
+        
+        Write down as:\\
+        \textbf{Stochastic Gradient Descent Steps:}\\
+        Assuming we have a Maximum iteration number $T_{max}$, threshold $\epsilon$ and Learning rate $\rho$.
+        \begin{enumerate}[label=(\roman*)]
+            \item Pick the initial point $\theta^0$
+            \item For $t = 1,2, \dots, T_{max}$
+            \begin{itemize}
+                \item randomly pick an $x_p \in \{x_1, x_2, \dots, x_N\}$
+                \item Calculate $\frac{\partial J(\theta)}{\partial \theta} = \frac{\partial \ell_\delta(y_p - \theta^T\phi(x_p))}{\partial \theta} = \left\{ 
+                    \begin{array}{rcl}
+                        [y_p-\theta^T\phi(x_p)] \cdot \phi(x_p)  & & |y_p-\theta^T\phi(x_p)| \le \delta \\
+                        \delta\cdot \phi(x_p) & & y_p-\theta^T\phi(x_p) \ge \delta \\
+                        -\delta\cdot \phi(x_p) & & y_p-\theta^T\phi(x_p) \le \delta
+                    \end{array} 
+                \right.$
+                \item If $||\frac{\partial J(\theta)}{\partial \theta}||_2^2 \le \epsilon$, return $\theta^{t-1}$; else, $\theta^t = \theta^{t-1} - \rho\frac{\partial J(\theta)}{\partial \theta}|_{\theta^{t-1}}$
+            \end{itemize}
+        \end{enumerate}
+
+
         \item \textbf{Probability and Random Variables:} State true or false. If true, prove it. If false, either prove or demonstrate by a counter example. Here $\Omega$ denotes the sample space and $A^c$ denotes the complement of the event $A$. $X$ and $Y$ denote random variables.
         \begin{enumerate}
             \item For any $A, B \subseteq \Omega$ such that $0 < P(A) < 1, P(A|B) + P(A|B^c) =1$
@@ -79,7 +151,7 @@
                 Since $P(A\cap B) + P(A\cap B^c) = P(A)$ \\
                 $P(A|B) +P(A|B^c) =  \frac{P(A\cap B)}{P(B)} + \frac{P(A) - P(A\cap B)}{1 - P(B)} $\\
                 Then we let $P(B) = 0.5$, $P(A) = 0.4$ and $P(A\cap B) = 0.3$\\
-                $P(A|B) +P(A|B^c) = \frac{0.3}{0.5} + \frac{0.4 - 0.3}{1 - 0.5} = 0.6 + 0.2 = 0.8 \ne 1$
+                $P(A|B) +P(A|B^c) = \frac{0.3}{0.5} + \frac{0.4 - 0.3}{1 - 0.5} = 0.6 + 0.2 = 0.8 \ne 1$\\
                 Therefore, the given term is False.
             \end{proof}
             
@@ -182,7 +254,7 @@
             \solu \\
             $\frac{1}{1+e^{\omega^T x_n}} = 0.7 \Rightarrow \frac{1}{0.7} = 1 + 1+e^{\omega^T x_n} \Rightarrow e^{\omega^T x_n} = \frac{1}{0.7} -1 \Rightarrow e^{-\omega^T x_n} = \frac{1}{\frac{1}{0.7} -1} = \frac{0.7}{1-0.7} = \frac{0.7}{0.3} $\\
             $\sigma(\omega^Tx_n) = \frac{1}{1+\frac{0.7}{0.3}} = \frac{0.3}{0.3+0.7} = 0.3$\\
-            Therefore, $p(y = 0 | x_n) = 1 - p(y = 1 | x_n) = 1-0.3 = 0/7$ \\
+            Therefore, $p(y = 0 | x_n) = 1 - p(y = 1 | x_n) = 1-0.3 = 0.7$ \\
             Thus, $x_n$ belongs to 0 with probability of 0.7
         \end{enumerate}
     \end{enumerate}
