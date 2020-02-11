@@ -58,11 +58,7 @@ def calc_error_xytheta(x_mat, y_mat, theta_mat):
 
 def gradient_descent_reg(data, max_iter=MAX_ITER, rho=RHO, epsilon=EPSILON):
     x_train = data['X_trn']
-    x_test = data['X_tst']
-    x_val = data['X_val']
     y_train = data['Y_trn']
-    y_test = data['Y_tst']
-    y_val = data['Y_val']
 
     curr_theta = np.zeros((len(x_train[0]), 1))
     i = 1
@@ -88,17 +84,17 @@ def single_descent(curr_theta, rho, x, y):
 
 def main():
     d1 = sio.loadmat('./data/dataset_hw2.mat')
-    print(d1.keys())
+    # print(d1.keys())
     theta_star, err_trn, err_tst, err_val = linear_reg(d1, 0)
     print(theta_star)
-    # print(err_trn)
-    # print(err_tst)
-    # print(err_val)
+    print(err_trn)
+    print(err_tst)
+    print(err_val)
     theta_star, err_trn, err_tst, err_val = linear_reg(d1, 1)
     print(theta_star)
-    # print(err_trn)
-    # print(err_tst)
-    # print(err_val)
+    print(err_trn)
+    print(err_tst)
+    print(err_val)
 
 
 if __name__ == '__main__':

@@ -435,11 +435,66 @@
             = \max\limits_{w}\sum_{i = 1}^{N}(y_i)[log(\frac{1 + e^{w^T\phi(x_i)}}{1 + e^{-w^T\phi(x_i)}})] + log\frac{1}{1 + e^{w^T\phi(x_i)}}\\
             \max\limits_{w}\sum_{i = 1}^{N}(y_i)[log(e^{w^T\phi(x_i)})] + log\frac{1}{1 + e^{w^T\phi(x_i)}}\\
             = \max\limits_{w}\sum_{i = 1}^{N}(y_iw^T\phi(x_i)) - log(1 + e^{w^T\phi(x_i)})\\
-            \equiv \min\limits_{w}\sum_{i = 1}^{N}-(y_iw^T\phi(x_i)) + log(1 + e^{w^T\phi(x_i)})$\\
+            \equiv \min\limits_{w}\sum_{i = 1}^{N}-y_iw^T\phi(x_i) + log(1 + e^{w^T\phi(x_i)})$\\
             Derivative:\\
             $\frac{\partial J}{\partial w}$
         \end{itemize}
         
+        \title{DS4400 Notes 02/11}
+        \maketitle
+
+        \begin{enumerate}
+            \item REVIEW:
+            logistic model: $P_w(y = 1 | x) = \frac{1}{1 + e^{-w^T\phi(x)}}$\\
+            MLE to learn w: \\
+            $\ell(x) = logP_w(D) = log \prod \limits_{i=1}^NP_w(y_i|x_i)\\
+            = \sum_{i =1}^N[y_i\phi(x_i)^Tw - log(1 + e^{w^T\phi(x_i)})]$
+            maximizing $\ell(w) \equiv$ minimizing $-\ell(w)$.
+            Then $\min_w -\ell(w) \\
+            = \min_w \sum_{i = 1}^{N}-y_iw^T\phi(x_i) + log(1 + e^{w^T\phi(x_i)})\\
+            =\min_w -y_i\phi(x_i)^Tw + log(1 + e^{w^T\phi(x_i)})$\\
+            derivative:\\
+            $\frac{\partial -\ell(w)}{\partial w} = \sum_i -y_i\phi(x_i) + \frac{1}{1 + e^{w^T\phi(x_i)}}(e^{w^T\phi(x_i)})(\phi(x_i))\\
+            = \sum_i -y_i\phi(x_i) + \frac{e^{w^T\phi(x_i)}\phi(x_i)}{1 + e^{w^T\phi(x_i)}}\\
+            = \sum_i -y_i\phi(x_i) + \frac{\phi(x_i)}{1 + e^{-w^T\phi(x_i)}}\\
+            = \sum_i (-y_i + \frac{1}{1 + e^{-w^T\phi(x_i)}})\phi(x_i)$\\
+            No closed form solution for = 0.
+            \item GD of logistic regression
+            \begin{itemize}
+                \item Initialize $w^0$
+                \item For t = 1, 2, \dots (until converge)
+                \begin{itemize}
+                    \item $w^t = w^{t-1} -\rho \frac{\partial J}{\partial w} |_{t-1}\\
+                    = w^{t-1} -\rho \sum (-y_i + \frac{1}{1 + e^{-w^T\phi(x_i)}})\phi(x_i)|_{t-1}$
+                \end{itemize}
+            \end{itemize}
+
+            \item overfitting.\\
+            overfitting: do well on training but poorly on testing.\\
+            Symptom: w with large entries.
+            
+            \item Regularized logistic regression:\\
+            $min_w J(w) = -\ell(w) + \frac{\lambda}{2}||w||_2^2$ \\
+            GD: $\frac{\partial J + \frac{\lambda}{2}||w||_2^2}{\partial w} = \frac{\partial J}{\partial w} + \lambda w\\
+            = \sum_i (-y_i + \frac{1}{1 + e^{-w^T\phi(x_i)}})\phi(x_i) + \lambda w^{t-1}$
+
+            \item clastering more than 2\\
+            one of the methods: Just creating n models for n type of data. each model is a i vs rest.\\
+            For each model we have:
+            $$P(y = i | x) = \sigma(w_i^T x)$$
+            Then see which have the max probability.
+            $$y^{test} = \argmax_{i \in \{0,1,\dots, N\}} \sigma (w^T_i \phi(x^{test}))$$
+
+            \item MAXIMUM a Posteriori (MAP) Estimation:\\
+            Incorporating with prior knowledge with parameters. When the data is not enough and we have some prior knowledge, we do MAP.\\
+            MAP setting: 
+            \begin{itemize}
+                \item we start with a "prior" model on parameters of systems $\rightarrow P_{prior}(\theta)$
+                \item we observe a dataset D $\rightarrow P_\theta(D)$
+                \item Given D, how the prior knowledge on $\theta$ changes $\rightarrow P(\theta | D)$
+            \end{itemize}
+            MAP: $\max_\theta P(\theta | D) \rightarrow \hat{\theta_{MAP}}$
+        \end{enumerate}
         
         \newpage
     \end{multicols}
