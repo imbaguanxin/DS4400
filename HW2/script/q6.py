@@ -58,6 +58,12 @@ def gradient_descent(x1_0, x2_0, max_iter, rho):
 
 
 def single_descent(point, rho):
+    """
+    perform a single descent from (t-1) to (t)
+    :param point: point (t-1)
+    :param rho: learning rate
+    :return: an array of the (t) point and the dJ/dtheta
+    """
     x1 = point[0]
     x2 = point[1]
     dx1 = np.sin(x1) * (-4. * x1 - 3. * x2) + np.cos(x1) * (-2. * np.power(x1, 2) - 3. * x1 * x2 + 2. * np.power(x2, 2))
@@ -69,6 +75,12 @@ def single_descent(point, rho):
 
 
 def f(x1, x2):
+    """
+    calculate the given function from given 2 inputs
+    :param x1: input x1
+    :param x2: input x2
+    :return: out put f(x1,x2)
+    """
     return np.sin(x1) * (-2. * np.power(x1, 2) - 3. * x1 * x2 + 2. * np.power(x2, 2))
 
 
