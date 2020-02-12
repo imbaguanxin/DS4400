@@ -9,7 +9,7 @@ import pandas as pd
 # matplotlib.use('Qt5Agg')
 
 EPSILON = 0.01
-MAX_ITER = 100000000
+MAX_ITER = 1000000000000000
 RHO = 0.001
 
 
@@ -127,7 +127,7 @@ def main():
     # print(x_train)
     # print(train_test)
     # print(d1.keys())
-    for n in range(5, 6):
+    for n in range(1, 10):
         print('n = {}'.format(n))
         print("closed form calculation:")
         theta_star, err_trn, err_tst, err_val = linear_reg(d1, 0, n_degree=n)
@@ -135,8 +135,8 @@ def main():
         print("training error: {}".format(err_trn))
         print("testing error: {}".format(err_tst))
         print("validation error: {}".format(err_val))
-    rho_list = [0.003, 0.0002, 0.000011, 0.0000005, 0.00000003, 0.01, 0.01, 0.01, 0.01]
-    for n in range(5, 6):
+    rho_list = [0.003, 0.0002, 0.000011, 0.0000005, 0.0000000315, 0.00000000147, 0.0000000000668, 0.0000000000029, 0.00000000000013]
+    for n in range(1, 10):
         tic = time.perf_counter()
         print('n = {}'.format(n))
         learning_rate = rho_list[n - 1]
