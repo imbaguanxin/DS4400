@@ -8,9 +8,9 @@ import pandas as pd
 # import matplotlib
 # matplotlib.use('Qt5Agg')
 
-EPSILON = 0.01
-MAX_ITER = 1000000000000000
-RHO = 0.001
+EPSILON = 0.001
+MAX_ITER = 10000000
+RHO = 0.01
 
 
 def phi_func(row, n_degree):
@@ -24,12 +24,29 @@ def phi_func(row, n_degree):
         return np.concatenate([result, [1]])
 
 
+def feature_normalization(trn, tst, val):
+    for i in range(0, len(trn[0]) - 1):
+        avg = np.mean(trn[:, i])
+        max_minus_min = np.max(trn[:, [i]])
+        trn[:, [i]] = (trn[:, [i]] - avg) / max_minus_min
+        tst[:, [i]] = (tst[:, [i]] - avg) / max_minus_min
+        val[:, [i]] = (val[:, [i]] - avg) / max_minus_min
+    return trn, tst, val
+
+
 def linear_reg(data, s, n_degree=-1, gd_rho=RHO):
     data_copy = data.copy()
     for key in ['X_trn', 'X_tst', 'X_val']:
-        temp = data_copy[key]
-        temp = np.apply_along_axis(phi_func, 1, temp, n_degree)
-        data_copy[key] = temp
+        data_copy[key] = np.apply_along_axis(phi_func, 1, data_copy[key], n_degree)
+    # feature normalization:
+    x_trn = data_copy['X_trn']
+    x_tst = data_copy['X_tst']
+    x_val = data_copy['X_val']
+    x_trn, x_tst, x_val = feature_normalization(x_trn, x_tst, x_val)
+    data_copy['X_trn'] = x_trn
+    data_copy['X_tst'] = x_tst
+    data_copy['X_val'] = x_val
+    # start regression:
     if s == 0:
         return closed_form_reg(data_copy)
     elif s == 1:
@@ -73,7 +90,9 @@ def gradient_descent_reg(data, max_iter=MAX_ITER, rho=RHO, epsilon=EPSILON):
     x_train = data['X_trn']
     y_train = data['Y_trn']
 
-    curr_theta = np.zeros((len(x_train[0]), 1))
+    # curr_theta = np.zeros((len(x_train[0]), 1))
+    curr_theta = np.full((len(x_train[0]), 1), 0)
+
     i = 1
 
     xtx, xty = xtx_xty(x_train, y_train)
@@ -103,6 +122,7 @@ def single_descent(curr_theta, rho, x, y):
 
 def descent_v2(xtx, xty, curr_theta, rho):
     new_dir = (np.matmul(xtx, curr_theta) - xty)
+    # print(new_dir)
     return curr_theta - new_dir * rho, new_dir
 
 
@@ -114,35 +134,21 @@ def xtx_xty(x, y):
 
 def main():
     d1 = sio.loadmat('./data/dataset_hw2.mat')
-    # print(d1.keys())
     d1.pop('__header__')
     d1.pop('__version__')
     d1.pop('__globals__')
-    # print(d1.keys())
-    # arow = np.array([1, 2, 3, 4, 5])
-    # test = phi_func(arow, 3)
-    # print(test)
-    # x_train = d1['X_trn']
-    # train_test = np.apply_along_axis(phi_func, 1, x_train, 3)
-    # print(x_train)
-    # print(train_test)
-    # print(d1.keys())
     for n in range(1, 10):
         print('n = {}'.format(n))
         print("closed form calculation:")
         theta_star, err_trn, err_tst, err_val = linear_reg(d1, 0, n_degree=n)
-        print("theta = \n {}".format(theta_star))
+        print("theta transpose = \n {}".format(theta_star.transpose()))
         print("training error: {}".format(err_trn))
         print("testing error: {}".format(err_tst))
         print("validation error: {}".format(err_val))
-    rho_list = [0.003, 0.0002, 0.000011, 0.0000005, 0.0000000315, 0.00000000147, 0.0000000000668, 0.0000000000029, 0.00000000000013]
-    for n in range(1, 10):
-        tic = time.perf_counter()
-        print('n = {}'.format(n))
-        learning_rate = rho_list[n - 1]
         print("gradient descent calculation:")
-        theta_star, err_trn, err_tst, err_val = linear_reg(d1, 1, n_degree=n, gd_rho=learning_rate)
-        print("theta = \n {}".format(theta_star))
+        tic = time.perf_counter()
+        theta_star, err_trn, err_tst, err_val = linear_reg(d1, 1, n_degree=n)
+        print("theta transpose = \n {}".format(theta_star.transpose()))
         print("training error: {}".format(err_trn))
         print("testing error: {}".format(err_tst))
         print("validation error: {}".format(err_val))
@@ -150,5 +156,23 @@ def main():
         print("running time: in {} seconds".format(toc - tic))
 
 
+
+def test():
+    trn = np.array([[1., -2., 3., 1],
+           [-1., 2., -3., 1],
+           [1., -2., -3., 1],
+           [-1., 2., 3., 1]])
+    tst = np.array([[1., -1., 1., 1],
+           [1., 1., -1., 1]])
+    val = np.array([[1., -1., 1., 1]])
+
+    # # print(np.average(val[:, 1]))
+    # trn, tst, val = feature_normalization(trn, tst, val)
+    # print(trn)
+    # print(tst)
+    # print(val)
+
+
 if __name__ == '__main__':
     main()
+    # test()
