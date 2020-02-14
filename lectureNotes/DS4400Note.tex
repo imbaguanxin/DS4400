@@ -44,7 +44,7 @@
 \begin{document}
     \maketitle
 
-    \begin{multicols}{2}
+    % \begin{multicols}{2}
         \title{DS4400 Notes 01/24}
         \maketitle
         \begin{enumerate}
@@ -397,7 +397,7 @@
         \textbf{Binary Classification}:\\
          input = Email $\rightarrow$ output = 'span' vs 'non-span' \\
         \textbf{Multiclass Classification}:\\
-        input = Image $\rightarrow$ output = 'car', 'bike', 'stop-sign', $\dots$\\
+        input = Image $\rightarrow$ output = 'car', 'bike', 'stop-sign', $\dots$
         \begin{itemize}
             \item \textbf{Classification Setup}:\\
             Given a training dataset $D=\{(x_1, y_1) \cdots (x_n, y_n)\}$ where $x_i \in \mathbb{R}^d$ is input feature vector and $y_i\in \{0,1,2,\dots, L-1\}$, Find a mapping $g:\mathbb{R}^d \rightarrow \{0,1,2,\dots, L-1\}$ s.t. $g_w(x_i) = y_i$ for many i's $\in \{1,2,\dots, N\}$ 
@@ -411,7 +411,7 @@
             Determine Z: $P_w(y = 1 | x) + P_w(y = 0 | x) = 1$:\\
             $\frac{1}{z}e^{w^T\phi(x)/2} + \frac{1}{z} e^{-w^T\phi(x)/2} = 1$\\
             $\rightarrow z = e^{w^T\phi(x)/2} + e^{-w^T\phi(x)/2}$\\
-            $\rightarrow P_w(y = 1 | x) = \frac{1}{z}e^{w^T\phi(x)/2} = \frac{1}{1 + e^{-w^T\phi(x)}}$\\
+            $\rightarrow P_w(y = 1 | x) = \frac{1}{z}e^{w^T\phi(x)/2} = \frac{1}{1 + e^{-w^T\phi(x)}}$
 
             Model: $P_w(y = 1 | x) = \frac{1}{1 + e^{-w^T\phi(x)}}$\\
             Model: $P_w(y = 0 | x) = 1- \frac{1}{1 + e^{-w^T\phi(x)}}$
@@ -427,8 +427,8 @@
             $\max\limits_{w}P_w(D) = \max\limits_{w}P_w(y_1 | x_1) \cdots P_w(y_N | x_N)\\
             = \max\limits_{w}\prod\limits_{i = 1}^{N}P_w(y_i | x_i)$ \\
             We can write :\\
-            $P_w(y_i|x_i) = P_w(y_i = 1 | x_1)^{y_i} P_w(y_i = 0 | x_1)^{1 - y_i}$
-            Apply natural log:
+            $P_w(y_i|x_i) = P_w(y_i = 1 | x_1)^{y_i} P_w(y_i = 0 | x_1)^{1 - y_i}$\\
+            Apply natural log:\\
             $\max\limits_{w} logP_w(D) = \max\limits_{w}\sum_{i = 1}^{N}log[(\frac{1}{1 + e^{-w^T\phi(x_i)}})^{y_i} + (\frac{1}{1 + e^{w^T\phi(x_i)}})^{1 -y_i}]\\
             = \max\limits_{w}\sum_{i = 1}^{N}(y_i)log(\frac{1}{1 + e^{-w^T\phi(x_i)}}) + (1 - y_i)log(\frac{1}{1 + e^{w^T\phi(x_i)}})\\
             = \max\limits_{w}\sum_{i = 1}^{N}(y_i)[log(\frac{1}{1 + e^{-w^T\phi(x_i)}}) - log(\frac{1}{1 + e^{w^T\phi(x_i)}})] + log\frac{1}{1 + e^{w^T\phi(x_i)}}\\
@@ -495,9 +495,52 @@
             \end{itemize}
             MAP: $\max_\theta P(\theta | D) \rightarrow \hat{\theta_{MAP}}$
         \end{enumerate}
+        \title{DS4400 Notes 02/14}
+        \maketitle
+
+        \textbf{Maximum A Posteriori (MAP) Estimation:}
         
+        Incoperate prior knowledge into system(parameter) learning
+        \begin{enumerate}
+            \item \exe \ bernoulli expriment: $\theta = P(x = 1)$
+            $\rightarrow  \hat{\theta}_{MLE}$ can be learned from training set $X_1 = x_1 \dots$\\
+            Tossing a coin : $\theta = P(X = 1) = P('H'), D = {H,H} \rightarrow \hat{\theta}_{MLE} = \frac{2}{2} = 1$
+            \item MAP setting:
+            \begin{itemize}
+                \item  Put a prior distribution on $\theta$ (that encodes prior knowledge / domain expertise)
+                \item Observe a data set $ D = \{X_1 = x_1, \dots, x_N =  N \} \rightarrow P(D | \theta) = P_\theta(D)$
+                \item How much our knowledge about $\theta$ changes after seeing data, D: $P(\theta | D) \rightarrow$ posterior dist.\\
+                MAP: $\max\limits_{\theta} P(\theta | D) \equiv \frac{P(D|\theta)P(\theta)}{P(D)} = \max\limits_\theta P(D|\theta)P(\theta) = \max\limits_\theta L(\theta)P(\theta)$
+            \end{itemize}
+            \item \exe \\
+                $X_1 = x_1, X_2 = x_2 \dots, X_N = x_N, x_i \in \{0,1\}$\\
+                $P(x_i = 1) = \theta, p(x_i = 0) = 1- \theta$\\
+                Using Beta distribution: $P_{\alpha,\beta}(\theta) \propto \theta^{\alpha - 1}(1-\theta)^{\beta - 1}$\\
+                MAP: $\max_\theta P(\theta | D) = \max P(x_1, x_2, \cdots, x_N | \theta)P_{\alpha, \beta}(\theta)\\
+                = \prod\limits_{i = 1}^{N}P(X_i = x_i)P_{\alpha, \beta}(\theta)\\
+                = \theta^{\sum x_i}(1-\theta)^{N - \sum x_i}\theta^{\alpha - 1}(1- \theta)^{\beta - 1} \\ 
+                = \theta^{\sum x_i + \alpha - 1} (1-\theta)^{N - \sum x_i + \beta - 1}$\\
+                Let $\alpha' = \sum x_i + \alpha - 1 $, $\beta' = N - \sum x_i + \beta - 1$\\
+                Then $P(\theta | D) \propto P_{\alpha', \beta'}(\theta)$\\
+                $\max\limits_\theta P(\theta | D) = \max\limits_\theta P_{\alpha', \beta'}(\theta) = \frac{\alpha' - 1}{\alpha' + \beta' -2}$\\
+                $\hat{\theta}_{MAP} = \frac{\alpha' - 1}{\alpha' + \beta' -2} = \frac{\sum x+i + \alpha - 1}{N + \alpha + \beta -2}\\
+                = \frac{N}{N + \alpha + \beta -2}\frac{\sum x_1}{N} + \frac{\alpha + \beta - 2}{N + \alpha + \beta - 2}\frac{\alpha - 1}{\alpha + \beta - 2}\\
+                = \eta\hat{\theta}_{MLE} + \eta\hat{\theta}_{prior \ mode}$
+            \item Conclusion:\\
+            $N \rightarrow \infty \Rightarrow \hat{\theta}_{MAP} \sim \hat{\theta}_{MLE}$\\
+            $N \rightarrow 0 \Rightarrow \hat{\theta}_{MAP} \sim \hat{\theta}_{prior \ mode}$\\
+            having prior mode is just adding fake observations generated by prior mode. The bigger the $1 - \eta$, the more fake observations we add to dataset
+
+            \item MAP on logistic regression:\\
+            $\rightarrow \min_\omega J(\omega)$. We might have $\theta$ of very large terms. \\
+            Then choose $p(\omega) \propto e^{-\omega^T\omega / 2\sigma^2} = e^{-||\omega||^2_2/2\sigma^2}$ \\
+            $\max\limits_\omega P(\omega | D) \propto \max\limits_\omega P(D | \omega)P(\omega)$\\
+            Then $\max_{\omega} log(P(\omega | D)) \propto \max\limits_{\omega}logP(D | \omega) + log P(\omega) \\
+            = \max\limits_{\omega}J(\omega) - \frac{1}{2\sigma^2}||\omega||^2_2\\
+            \equiv \min\limits_\omega -J(\omega) + \lambda ||\omega||^2_2$
+        \end{enumerate}
         \newpage
-    \end{multicols}
+    % \end{multicols}
 
     \newpage
     
