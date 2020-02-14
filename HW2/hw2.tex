@@ -59,14 +59,14 @@
         $Y = \begin{bmatrix}
             y_1 \\  y_2 \\ \dots \\ y_n
         \end{bmatrix}$ the dimension is $N \times d$\\
-        Then $\frac{\partial f(\theta)}{\partial \theta} = 2(\Phi^T\Phi\theta- \Phi^T Y) - 2\lambda(\theta - a)$\\
+        Then $\frac{\partial f(\theta)}{\partial \theta} = 2(\Phi^T\Phi\theta- \Phi^T Y) + 2\lambda(\theta - a)$\\
         Let $\frac{\partial f(\theta)}{\partial \theta} = 0$\\
-        $$\Phi^T\Phi\theta- \Phi^T Y = \lambda(\theta - a)$$
-        $$\Phi^T\Phi\theta- \Phi^T Y = \lambda I_d \theta - \lambda I_da$$
-        $$\Phi^T\Phi\theta -  \lambda I_d\theta  = \Phi^T Y  - \lambda I_da$$
-        $$(\Phi^T\Phi - \lambda I_d)\theta  = \Phi^T Y  - \lambda I_da$$
-        $$\theta= (\Phi^T\Phi - \lambda I_d)^{-1}(\Phi^T Y  - \lambda I_da)$$
-        Therefore, $\hat{\theta}$ is $(\Phi^T\Phi - \lambda I_d)^{-1}(\Phi^T Y  - \lambda I_da)$
+        $$\Phi^T\Phi\theta- \Phi^T Y = - \lambda(\theta - a)$$
+        $$\Phi^T\Phi\theta- \Phi^T Y = \lambda I_da - \lambda I_d \theta $$
+        $$\Phi^T\Phi\theta +  \lambda I_d\theta  = \Phi^T Y  + \lambda I_da$$
+        $$(\Phi^T\Phi + \lambda I_d)\theta  = \Phi^T Y  + \lambda I_da$$
+        $$\theta= (\Phi^T\Phi + \lambda I_d)^{-1}(\Phi^T Y  + \lambda I_da)$$
+        Therefore, $\hat{\theta}$ is $(\Phi^T\Phi + \lambda I_d)^{-1}(\Phi^T Y + \lambda I_da)$
 
         \item \textbf{Robust Regression using Huber Loss:} In the class, we defined the Huber loss as 
         $$\ell_\delta(e) = \left\{
@@ -165,7 +165,10 @@
                 Also, we can write $P(A^c \cup B) = P(A^c) + P(B) - P(A^c \cap B)$\\
                 Then $P(B^c\cap (A\cup B)) + P(A^c \cup B) \\
                 = P(B^c \cap A) + P(A^c \cup B)\\
-                = P(A) - P(A \cap B) + P(A^c) + P(B) - P(A^c \cap B)\\
+                = P(\Omega - B) \cap A )+ P(A^c) + P(B) - P(A^c \cap B)\\
+                = P((\Omega \cap A) - (B \cap A) )+ P(A^c) + P(B) - P(A^c \cap B)\\
+                = P(A - (B \cap A))+ P(A^c) + P(B) - P(A^c \cap B)\\
+                = P(A) - P(B \cap A) + P(A^c) + P(B) - P(A^c \cap B)\\
                 = P(A)+ P(A^c) + P(B) - (P(A \cap B)+ P(A^c \cap B))$\\
                 Since $P(A) + P(A^c) = 1$ and $P(A \cap B) + P(A^c \cap B) = P(B)$\\
                 $P(B^c\cap (A\cup B)) + P(A^c \cup B) = 1$
@@ -199,7 +202,7 @@
 
             \item If $X$ and $Y$ are independent discrete random variables, then $E[XY] = E[X]E[Y]$, where $E[\cdots]$ denotes expectation.
             
-            \solu
+            \solu \ This is \textbf{True}
             \begin{proof}
                 $X \indep Y \Rightarrow P(XY) = P(X)P(Y)$\\
                 $E(XY) \\
@@ -211,30 +214,30 @@
         \end{enumerate}
 
         \item \textbf{Maximum Likelihood Estimation:} Assume $X_1, X_2, \dots, X_N$ are i.i.d. random variables each taking a real value, where
-        $$p_\delta(X_i = x_i) = e^{-\delta^2+\delta x_i}$$
+        $$p_\delta(X_i = x_i) = e^{-(\delta^2+\delta x_i)}$$
         Here, $\delta$ is the parameter of the distribution. Assume, we observe $X_1 = x_1, X_2 = x_2, \dots, X_N = x_N$.
         \begin{enumerate}
             \item Write down the likelihood function $L(\delta)$.
             
             \solu \\
-            $L(\delta) = \prod\limits_{i = 1}^{i = N}p_\delta(X_i = x_i) \\
-            = \prod\limits_{i = 1}^{i = N}e^{-\delta^2+\delta x_i} $
+            $L(\delta) = \prod\limits_{i = 1}^{N}p_\delta(X_i = x_i) \\
+            = \prod\limits_{i = 1}^{N}e^{-(\delta^2+\delta x_i)} $
 
             \item Derive the maximum likelihood or log-likelihood estimation of $\delta$ for the given observations. Provide all steps of derivations.
             
             \solu \\
-            $log(L(\delta)) = log(\prod\limits_{i = 1}^{i = N} e^{-\delta^2+\delta x_i}) \\
-            = \sum\limits_{i = 1}^{i = N} log(e^{-\delta^2+\delta x_i})\\
-            = \sum\limits_{i = 1}^{i = N} -\delta^2+\delta x_i\\
-            = -N\delta^2 + \delta\sum\limits_{i = 1}^{i = N}x_i$\\
+            $log(L(\delta)) = log(\prod\limits_{i = 1}^{N} e^{-(\delta^2+\delta x_i)}) \\
+            = \sum\limits_{i = 1}^{N} log(e^{-(\delta^2+\delta x_i)})\\
+            = \sum\limits_{i = 1}^{N} -\delta^2-\delta x_i\\
+            = -N\delta^2 - \delta\sum\limits_{i = 1}^{N}x_i$\\
             Then $\frac{\partial log(L(\delta))}{\partial \delta} 
-            = \frac{\partial( -N\delta^2 + \delta\sum\limits_{i = 1}^{i = N}x_i)}{\partial \delta}
-            = -2N\delta + \sum\limits_{i = 1}^{i = N}x_i$\\
+            = \frac{\partial( -N\delta^2 - \delta\sum\limits_{i = 1}^{N}x_i)}{\partial \delta}
+            = -2N\delta - \sum\limits_{i = 1}^{N}x_i$\\
             Let $\frac{\partial log(L(\delta))}{\partial \delta} = 0$.
-            Then, $-2N\delta + \sum\limits_{i = 1}^{i = N}x_i = 0\\
-            \Rightarrow 2N\delta = \sum\limits_{i = 1}^{i = N}x_i
-            \Rightarrow \delta = \frac{\sum\limits_{i = 1}^{i = N}x_i}{2N}$\\
-            Therefore, $\hat{\delta} = \frac{\sum\limits_{i = 1}^{i = N}x_i}{2N}$
+            Then, $-2N\delta - \sum\limits_{i = 1}^{N}x_i = 0\\
+            \Rightarrow 2N\delta = -\sum\limits_{i = 1}^{N}x_i
+            \Rightarrow \delta = \frac{-\sum\limits_{i = 1}^{N}x_i}{2N}$\\
+            Therefore, $\hat{\delta} = \frac{-\sum\limits_{i = 1}^{N}x_i}{2N}$
         \end{enumerate}
 
         \item \textbf{Logistic Regression:} In the logistic regression for binary classification $(y \in \{0,1\})$, we defined $p(y = 1 | x) = \sigma(\omega^Tx)$, where the sigmoid function is defined as
@@ -247,8 +250,8 @@
             $\omega^T x_n < 0.3 \Rightarrow e^{-\omega^T x_n} > e^{-0.3}\\
             \Rightarrow 1 + e^{-\omega^T x_n} > 1 + e^{-0.3}\\
             \Rightarrow \frac{1}{1 + e^{-\omega^T x_n}} < \frac{1}{1 + e^{-0.3}}\\
-            \Rightarrow p(y = 1 | x) < 0.5744$
-
+            \Rightarrow p(y = 1 | x) < 0.5744$\\
+            Therefore, $x_n$ might be 1 or 0. When $p(y = 1 | x) < 0.5$, $x_n$ is 0. When $0.5 < p(y = 1 | x) < 0.5744$, $x_n$ is 1. 
             \item Assume $\frac{1}{1+e^{\omega^T x_n}} = 0.7.$ To which class $x_n$ belongs and with what probability? Provide detaisl of your derivations.
             
             \solu \\
