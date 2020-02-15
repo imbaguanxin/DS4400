@@ -130,7 +130,7 @@ def xtx_xty(x, y):
     return xt_x, xt_y
 
 
-def plot_regression(data, theta):
+def plot_regression(data, theta, title=""):
     # plot scatter point from data set
     x = data['x']
     y = data['y']
@@ -141,6 +141,7 @@ def plot_regression(data, theta):
     expanded_x = np.apply_along_axis(phi_func, 1, theta_x, len(theta) - 1)
     theta_y = np.matmul(expanded_x, theta)
     plt.plot(list(theta_x), list(theta_y))
+    plt.title(title + " n = {}".format(theta.shape[0]))
     plt.show()
 
 
@@ -169,9 +170,9 @@ def main():
         print("testing error: {}".format(err_tst))
         print("validation error: {}".format(err_val))
         print("gradient descent calculation:")
-        # plot_regression({"x": data_copy['X_trn'], "y": data_copy["Y_trn"]}, theta_star)
-        # plot_regression({"x": data_copy['X_tst'], "y": data_copy["Y_tst"]}, theta_star)
-        # plot_regression({"x": data_copy['X_val'], "y": data_copy["Y_val"]}, theta_star)
+        plot_regression({"x": data_copy['X_trn'], "y": data_copy["Y_trn"]}, theta_star, title="closed form training set")
+        # plot_regression({"x": data_copy['X_tst'], "y": data_copy["Y_tst"]}, theta_star, title="closed form testing set")
+        # plot_regression({"x": data_copy['X_val'], "y": data_copy["Y_val"]}, theta_star, title="closed form validation set")
 
         tic = time.perf_counter()
         data_copy, theta_star, err_trn, err_tst, err_val = linear_reg(d1, 1, n_degree=n)
@@ -184,26 +185,26 @@ def main():
         print("validation error: {}".format(err_val))
         toc = time.perf_counter()
         print("running time: in {} seconds".format(toc - tic))
-        # plot_regression({"x": data_copy['X_trn'], "y": data_copy["Y_trn"]}, theta_star)
-        # plot_regression({"x": data_copy['X_tst'], "y": data_copy["Y_tst"]}, theta_star)
-        # plot_regression({"x": data_copy['X_val'], "y": data_copy["Y_val"]}, theta_star)
+        plot_regression({"x": data_copy['X_trn'], "y": data_copy["Y_trn"]}, theta_star, title="gradient descent training set")
+        # plot_regression({"x": data_copy['X_tst'], "y": data_copy["Y_tst"]}, theta_star, title="gradient descent testing set")
+        # plot_regression({"x": data_copy['X_val'], "y": data_copy["Y_val"]}, theta_star, title="gradient descent validation set")
 
-    err_list = {"closed form training error": closed_trn_err_list,
-                "closed form testing error": closed_tst_err_list,
-                "closed form validating error": closed_val_err_list,
-                "gradient descent training error": gd_trn_err_list,
-                "gradient descent testing error": gd_tst_err_list,
-                "gradient descent validating error": gd_val_err_list}
-    for err in ["closed form training error",
-                "closed form testing error",
-                "closed form validating error"]:
-        plt.plot(np.arange(1, 10, 1), err_list[err])
-    plt.show()
-    for err in ["gradient descent training error",
-                "gradient descent testing error",
-                "gradient descent validating error"]:
-        plt.plot(np.arange(1, 10, 1), err_list[err])
-    plt.show()
+    # err_list = {"closed form training error": closed_trn_err_list,
+    #             "closed form testing error": closed_tst_err_list,
+    #             "closed form validating error": closed_val_err_list,
+    #             "gradient descent training error": gd_trn_err_list,
+    #             "gradient descent testing error": gd_tst_err_list,
+    #             "gradient descent validating error": gd_val_err_list}
+    # for err in ["closed form training error",
+    #             "closed form testing error",
+    #             "closed form validating error"]:
+    #     plt.plot(np.arange(1, 10, 1), err_list[err])
+    # plt.show()
+    # for err in ["gradient descent training error",
+    #             "gradient descent testing error",
+    #             "gradient descent validating error"]:
+    #     plt.plot(np.arange(1, 10, 1), err_list[err])
+    # plt.show()
 
 
 def test():
