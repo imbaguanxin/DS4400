@@ -1,14 +1,9 @@
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import time
 import numpy as np
 import scipy.io as sio
-import pandas as pd
 
-# import matplotlib
-# matplotlib.use('Qt5Agg')
-
-EPSILON = 0.001
+EPSILON = 0.01
 MAX_ITER = 10000000
 RHO = 0.01
 
@@ -30,7 +25,7 @@ def feature_normalization(data):
     val = data['X_val']
     for i in range(0, len(trn[0])):
         avg = np.mean(trn[:, i])
-        max_minus_min = np.max(trn[:, [i]])
+        max_minus_min = np.max(trn[:, [i]]) - np.min(trn[:, [i]])
         trn[:, [i]] = (trn[:, [i]] - avg) / max_minus_min
         tst[:, [i]] = (tst[:, [i]] - avg) / max_minus_min
         val[:, [i]] = (val[:, [i]] - avg) / max_minus_min
@@ -141,7 +136,7 @@ def plot_regression(data, theta, title=""):
     expanded_x = np.apply_along_axis(phi_func, 1, theta_x, len(theta) - 1)
     theta_y = np.matmul(expanded_x, theta)
     plt.plot(list(theta_x), list(theta_y))
-    plt.title(title + " n = {}".format(theta.shape[0]))
+    plt.title(title + " n = {}".format(theta.shape[0] - 1))
     plt.show()
 
 

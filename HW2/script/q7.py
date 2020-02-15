@@ -1,12 +1,7 @@
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import time
 import numpy as np
 import scipy.io as sio
-import pandas as pd
-
-# import matplotlib
-# matplotlib.use('Qt5Agg')
 
 EPSILON = 0.001
 MAX_ITER = 10000000
@@ -92,16 +87,9 @@ def gradient_descent_reg(data, max_iter=MAX_ITER, rho=RHO, epsilon=EPSILON):
 
     # curr_theta = np.zeros((len(x_train[0]), 1))
     curr_theta = np.full((len(x_train[0]), 1), 0)
-
     i = 1
-
-    xtx, xty = xtx_xty(x_train, y_train)
-
     for i in range(0, max_iter):
-        # new_theta, new_dir = single_descent(curr_theta, rho, x_train, y_train)
-
-        new_theta, new_dir = descent_v2(xtx, xty, curr_theta, rho)
-
+        new_theta, new_dir = single_descent(curr_theta, rho, x_train, y_train)
         curr_theta = new_theta
         if np.linalg.norm(new_dir) < epsilon:
             print("The total number of iterations is: {} with rho = {}".format(i + 1, rho))
@@ -120,27 +108,11 @@ def single_descent(curr_theta, rho, x, y):
     return theta, new_dir
 
 
-def descent_v2(xtx, xty, curr_theta, rho):
-    new_dir = (np.matmul(xtx, curr_theta) - xty)
-    # print(new_dir)
-    return curr_theta - new_dir * rho, new_dir
-
-
-def xtx_xty(x, y):
-    xt_x = np.matmul(x.transpose(), x)
-    xt_y = np.matmul(x.transpose(), y)
-    return xt_x, xt_y
-
-
 def plot_regression(data, theta, title=""):
     x = data['x']
     y = data['y']
     x_first_col = x[:, [0]]
-    # print(x_first_col.shape)
-    # print(y.shape)
     plt.scatter(x_first_col, y)
-    # print(theta_x.shape)
-    # plot line generated from theta
     theta_x = np.array([np.arange(-1, 1, 0.01)]).transpose()
     expanded_x = np.apply_along_axis(phi_func, 1, theta_x, len(theta) - 1)
     theta_y = np.matmul(expanded_x, theta)
