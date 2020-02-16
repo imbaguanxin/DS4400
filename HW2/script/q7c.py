@@ -9,6 +9,9 @@ RHO = 0.01
 
 
 def phi_func(row, n_degree):
+    """
+    This is the phi function that apply to each row
+    """
     if n_degree == -1:
         return row
     else:
@@ -20,6 +23,10 @@ def phi_func(row, n_degree):
 
 
 def feature_normalization(trn, tst, val):
+    """
+    This function normalize all training, testing and validation sets.
+    It normalize the testing and validation sets with parameter computed from training set.
+    """
     for i in range(0, len(trn[0]) - 1):
         avg = np.mean(trn[:, i])
         max_minus_min = np.max(trn[:, [i]]) - np.min(trn[:, [i]])
@@ -30,6 +37,10 @@ def feature_normalization(trn, tst, val):
 
 
 def linear_reg(data, s, lam_da, n_degree=-1, gd_rho=RHO):
+    """
+    The main function of linear regression
+    input s = 1 to do gradient descent and s = 0 to do closed form
+    """
     data_copy = data.copy()
     for key in ['X_trn', 'X_tst', 'X_val']:
         data_copy[key] = np.apply_along_axis(phi_func, 1, data_copy[key], n_degree)
@@ -49,12 +60,19 @@ def linear_reg(data, s, lam_da, n_degree=-1, gd_rho=RHO):
 
 
 def closed_form_reg(data, lam_da):
+    """
+    wrapper of closed form regression.
+    Calculate the learning result, then calculate the errors
+    """
     theta_star = closed_form_theta(data, lam_da)
     err_trn, err_tst, err_val = calc_error(data, theta_star)
     return theta_star, err_trn, err_tst, err_val
 
 
 def closed_form_theta(data, lam_da):
+    """
+    calculate optimal theta from training data and given lambda
+    """
     x_trn = data['X_trn']
     y_trn = data['Y_trn']
     xtx = np.matmul(x_trn.transpose(), x_trn)
@@ -65,6 +83,9 @@ def closed_form_theta(data, lam_da):
 
 
 def calc_error(data, theta):
+    """
+    Calculating errors of training, testing and validation sets
+    """
     x_train = data['X_trn']
     x_test = data['X_tst']
     x_val = data['X_val']
@@ -79,12 +100,18 @@ def calc_error(data, theta):
 
 
 def calc_error_xytheta(x_mat, y_mat, theta_mat):
+    """
+    A helper that calculates the errors given PHI(X), Y and optimal theta
+    """
     err_mat = np.subtract(y_mat, np.matmul(theta_mat.transpose(), x_mat.transpose()).transpose())
     err = np.power(np.linalg.norm(err_mat), 2) / len(err_mat)
     return err
 
 
 def gradient_descent_reg(data, lamb_da, max_iter=MAX_ITER, rho=RHO, epsilon=EPSILON):
+    """
+    The main function that does the gradient descent.
+    """
     x_train = data['X_trn']
     y_train = data['Y_trn']
     curr_theta = np.full((len(x_train[0]), 1), 0)
