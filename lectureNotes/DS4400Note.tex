@@ -495,6 +495,7 @@
             \end{itemize}
             MAP: $\max_\theta P(\theta | D) \rightarrow \hat{\theta_{MAP}}$
         \end{enumerate}
+        
         \title{DS4400 Notes 02/14}
         \maketitle
 
@@ -539,9 +540,88 @@
             = \max\limits_{\omega}J(\omega) - \frac{1}{2\sigma^2}||\omega||^2_2\\
             \equiv \min\limits_\omega -J(\omega) + \lambda ||\omega||^2_2$
         \end{enumerate}
+
+        \title{DS4400 Notes 02/18}
+        \maketitle
+
+        \textbf{Classification}
+        \begin{enumerate}
+            \item Discriminative Modeling
+            
+            Find a decisim boundary that seperates data into classes\\
+            e.g logistic regression
+
+            Discriminative approacheds model:\\
+            $P(y | x)$, y is class, x is feature vector.\\
+            e.g. $P(y = 1 | x) = \sigma(w^T\phi(x)) = \frac{1}{1 + e^{-w^T\phi(x)}}$
+            \item Generative Modeling
+
+            Model distribution of data in each class as well as the distribution of classes themselves.
+
+            $\rightarrow P(x | y)$(Feature of class) and $P(y)$(class).
+
+            \begin{itemize}
+                \item Assume we learn $P(x | y), P(y)$ during training
+                \item How to classify a new test sample $x^+$?
+                
+                $\Rightarrow \argmax\limits_{j = 0,1,\dots, L-1} P(y = j | x^t) = \argmax\limits_{j = 0,1,\dots, L-1} \frac{P(x^t | y = j)P(y = j)}{P(x^t)} \equiv \argmax\limits_{j = 0,1,\dots, L-1}P(x^t | y = j)P(y = j)$
+            \end{itemize}
+
+            \item Example: email classification: $\{(x^1, y^1), \dots, (x^N, y^N)\}$\\
+            probable $x: \begin{pmatrix}
+                "CPAS"\\ "Free" \\ "Call \ now"
+            \end{pmatrix}$
+            $y = \{"non-spam", "spam"\}$\\
+            Parameters to learn are:
+            $$\theta_0^y \triangleq P(y = 0) = P(`non-spam')$$
+            $$\theta_1^y \triangleq P(y = 1) = P(`spam')$$
+            $$\theta_{\overbar{x}|0}^{x|y} \triangleq P(x = \overbar{x} \ | \ y = 1) = P(x = \overbar{x} \ | \ `non-spam')$$
+            $$\theta_{\overbar{x} | 1}^{x | y} \triangleq P(x = \overbar{x} \ | \ y = 1) = P(x = \overbar{x} \ | \ `spam')$$
+            More generally,
+            $\Theta \triangleq$
+            \begin{equation}
+            \left\{  
+            \begin{array}{l}
+                \theta_j^y\triangleq P(y = j), \ \forall j = 0,1,\dots, L-1  \\
+                \theta_{\overbar{x}|j}^{x|y} \triangleq P(x = \overbar{x} \ | \ y = j), \ \forall x = \overbar{x}, \forall j = 0,1,\dots, L-1
+            \end{array}
+            \right.
+            \end{equation}
+            
+            \item \textbf{Approach: MLE}:\\
+            MLE: $L(\theta) = P_\Theta(x1,y1, \dots, x^N,y^N) =_{iid} = \prod_j P_\Theta(x^i,y^i)  = \prod_j P_\Theta(x^i|y^i)P(y^i)$\\
+            $P(y^i) = P(y^i = 0)^{1(y^i = 0)}\cdot P(y^i = 0)^{1(y^i = 0)}\cdot \dots P(y^i = 0)^{1(y^i = 0)} \\
+            = \theta_0^{1(y^i = 0)}\theta_0^{1(y^i = 1)}\dots \theta_0^{1(y^i = L-1)} $\\
+            $L(\theta) = \prod_i P(x^i|y^i) \prod_i \prod_{j=0}^{L-1} P(y^i = j)^{1(j^i = j)} \\
+            = \prod_i P(x^i|y^i) \prod_i \prod_{j=0}^{L-1} {\theta_j^y}^{1(j^i = j)} \\$
+            $ \Rightarrow logL(\theta) = \sum_i logP(x^i|y^i) \sum_i \sum_{j=0}^{L-1} {1(j^i = j)}log({\theta_j^y}) $\\
+            To estimate \\
+            $\hat{\theta}^y_j \Rightarrow \frac{\partial LogL(\theta)}{\partial \theta^y_j} = 0 \Rightarrow \hat{\theta^y_j}= \frac{\sum_i^N 1(y^i = j)}{N}$\\
+            $\hat{\theta}^{x|y}_{\overbar{x}|j} =  \frac{\sum_i 1(x^i = \overbar{x}, y^i = j)}{\sum_{i = 1}^N 1(y^i = j)}$\\
+            This is called \textbf{Vanilla Generative Model}.
+
+            $\theta^y_j \Rightarrow L$ estimations\\
+            $\theta^{x|y}_{\overbar{x}|j} \Rightarrow Lm^d$ estimations \\(given x has d dimension and each dimension has m values) i.e. 
+            $x = \begin{pmatrix}
+                0,1,2,\dots, m - 1 \\ 0,1,2,\dots, m - 1 \\ \vdots \\ 0,1,2,\dots, m - 1
+            \end{pmatrix}_{d\times 1}$
+
+            \item Problem: Document Classifications:\\
+            length of doc: $|DOC|$, we have possiblly $|DOC|$ features, each feature may have $|DOC|$ of possible values. Then the estimation is $L\cdot|DOC|^{|DOC|}$
+
+            \item Naive Bayes Method:\\
+            Generative model where feature are independent for a particular given class.\\
+            $P(x = \overbar{x} | y = j)$ where x has d features.\\
+            e.g. spam classifications: $ x = \begin{pmatrix}
+                'free' \\ 'caps' \\ 'call \ now'
+            \end{pmatrix}, y = 0,1$\\
+            $P(x = (1,1,1)^T | y = 1) = P('free' = 1 | y = 1)P('caps' = 1| y = 1)P('call \ now' | y = 1)$\\
+            class conditional independence.\\
+            $O(Lmd)$
+        \end{enumerate}
+
         \newpage
     % \end{multicols}
 
-    \newpage
     
 \end{document}
