@@ -1,0 +1,160 @@
+\documentclass[10pt]{article}  
+\usepackage{graphicx}
+\usepackage{geometry}   %设置页边距的宏包
+\usepackage{algpseudocode}
+\usepackage{comment}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{framed}
+\usepackage{verbatim}
+\usepackage{microtype}
+\usepackage{kpfonts}
+\usepackage{multicol}
+\usepackage{amsfonts}
+\usepackage{array}
+\usepackage{color}
+\newcommand{\solu}{{\color{blue} Solution:}}
+\newcommand{\theo}{{\color{blue} Theorem: $\ $}}
+\newcommand{\defi}{{\color{blue} Definition: $\ $}}
+\newcommand{\recall}{{\color{blue} Recall: $\ $}}
+\newcommand{\exe}{{\color{green} Exercise: $\ $}}
+\newcommand{\prop}{{\color{blue} Prop: $\ $}}
+
+\newcommand{\hw}{{\color{red} Homework: $\ $}}
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+\newcommand{\Ib}{\mathbf{I}}
+\newcommand{\Pb}{\mathbf{P}}
+\newcommand{\Qb}{\mathbf{Q}}
+\newcommand{\Rb}{\mathbf{R}}
+\newcommand{\Nb}{\mathbf{N}}
+\newcommand{\Fb}{\mathbf{F}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\Lap}{\mathcal{L}}
+\newcommand{\Zplus}{\mathbf{Z}^+}
+\newcommand{\indep}{\perp \!\!\! \perp}
+\DeclareMathOperator*{\argmin}{\arg\min}
+\DeclareMathOperator*{\argmax}{\arg\max}
+\geometry{left=1cm,right=1cm,top=1cm,bottom=1cm}  %设置 上、左、下、右 页边距
+\begin{document}
+\begin{multicols}{2}
+    \begin{enumerate}
+        \item Matrix Derivation:\\
+        $f: R^n \rightarrow R$\\
+        $\frac{\partial f(x)}{\partial x} = \begin{pmatrix}
+            \partial f/ x_1 \\ \partial f/ x_2 \\
+            \dots \\ \partial f/ x_n
+        \end{pmatrix} \in R^{n}$\\
+        $f: R^{m\times n} \rightarrow R$\\
+        $\frac{\partial f(x)}{\partial x} = \begin{pmatrix}
+            \partial f/ x_{11} & \partial f / x_{12} & \dots & \partial f/ x_{1n} \\ & \dots & \dots & \\
+            \partial f/ x_{m1} & \partial f / x_{m2} & \dots & \partial f/ x_{mn}
+        \end{pmatrix} \in R^{m\times n}$
+        \item Convex:\\
+        $J(\alpha \theta_1 + (1-\alpha)\theta_2) \le \alpha J(\theta_1) + (1-\alpha)J(\theta_2)$ \\
+        or in $R$, $J''(\theta) \ge 0, \forall \theta$ 
+        \item Linear Regression:\\
+        $\hat{\theta} = \argmin\limits_{\theta}\sum_i l(\theta^T\phi(x_i), y_i)$, $l$ is $l_2$-norm$^2$\\
+        $\hat{\theta} = \argmin\limits_{\theta}\sum_i ||\theta^T\phi(x_i)- y_i||_2^2$\\
+        Convex, let Derivitive = 0 $\Rightarrow \frac{\partial J(\theta)}{\partial \theta} = 0$ \\
+        $\sum_i 2(\theta^T\phi(x_i)-y_i)\phi(x_i) = 0 \Rightarrow \Phi^T\Phi\theta = X^TY$ \\
+        Cost time: $O(d^3 + d^2N)$
+        When not invertible: $n < d$\\
+        since $rk(\Phi^T\Phi) < rk(\Phi) < \min\{n,d\}$, when $n < d$ we have $rk(\Phi^T\Phi)  = n < d$ then it is not-full rank.\\
+        \textbf{Deal with Outliers:}
+        \begin{itemize}
+            \item remove detected Outliers
+            \item Robust Regression function: Huber loss Func. We write $\phi(x_i) - y_i$ as $e$, where $\delta$ is a hyperparameter\\
+            $MSE$ squares errors, outliers will distort the loss value significantly. Huber loss calculate $l_1$ norm on large values which gives more tolerance.
+            $$
+                l_{\delta} (e) = \left\{ 
+                    \begin{array}{rcl}
+                        \frac{1}{2}e^2 & & |e| \le \delta \\
+                        \delta |e| - \frac{{\delta}^2}{2} & & |e| \ge \delta
+                    \end{array} 
+                    \right.
+             $$
+             $$
+             \frac{\partial l_{\delta}(e)}{\partial e} = 
+             \left\{
+                 \begin{array}{rcl}
+                    e & & -\delta \le e le \delta\\
+                    \delta & & e > \delta\\
+                    -\delta & & e < \delta
+                 \end{array}
+             \right.
+             $$
+        \end{itemize}
+        \textbf{Deal with Overfitting:} overfitting might have large $\theta$\\
+        $\argmin_{\theta} \sum_{i = 1}^{N}(\theta^T\phi(x_i) - y_i)^2 + \lambda ||\theta||^2_2$\\
+        Closed Form: $(\Phi^T \Phi + \lambda I_d )\theta = \Phi^T Y$\\
+        $\lambda \rightarrow 0$ same as original; $\lambda \rightarrow \infty, \hat{\theta}\rightarrow \vec{0}$ \\
+        When selecting $\lambda$, the naive training on all data is not work since $\lambda = 0$ minimizes the overall error.
+        \begin{itemize}
+            \item We need to Train $\lambda_i$ on \textbf{training set} to minimize the cost function 
+            \item Measure error on the \textbf{hold-out set} $D^{ho}$ and find the $\lambda$ that minimize $\epsilon^{ho} = \sum\limits_{x_i,y_i \in D^{ho} } (y_i - (\theta^*_{\lambda})^Tx_i)^2$
+        \end{itemize}
+
+        \item Gradient Descent:\\
+        Start with $\theta^{(0)} \in R^d$\\
+        In each iteration, update $\theta$ until $||\theta^{(k)} - \theta^{(k+1)}|| < \epsilon$\\
+        $$\theta^{(k+1)} = \theta^{(k)} - \rho\frac{\partial J(\theta)}{\partial \theta} |_{\theta^{(k)}}$$
+        $O(Nd)$ in each iteration.\\
+        Stochastic gradient descent: randomly select 1 data entry when computing derivative in each iteration.
+
+        \item K-fold cross validation
+            
+        divide Data set to k equally large sets $\{D_1, D_2, \dots, D_k\} \in D$
+
+        \begin{itemize}
+            \item For $\lambda \in \{\lambda_1, \lambda_2 \dots, \lambda_p\}$
+            \begin{itemize}
+                \item For $i = 1,2, \dots, k$
+                \begin{itemize}
+                    \item train on $\bigcup\limits_{j\ne i}D^j$ and get $\theta_i^*(\lambda)$
+                    \item compute validate error on $D^i \rightarrow \epsilon^{ho}_i(\lambda)$
+                \end{itemize}
+                \item compute average of $\{\epsilon_i^{ho}(\lambda)$\}: $\epsilon^{ho} = \frac{1}{k}\sum_{i = 1}^{k}\epsilon^{ho}(\lambda)$
+            \end{itemize}
+            \item select $\lambda^* = \min\limits_{\{\lambda_1, \lambda_2 \dots, \lambda_p\}}\epsilon^{ho}(\lambda)$
+        \end{itemize}
+        
+        \item Probability review:\\
+        Condition: $P(X|Y) = \frac{P(X, Y)}{P(Y)} \Leftrightarrow P(X,Y) = P(X|Y)P(Y)$\\
+        Bayes law: $P(X|Y)P(Y) = P(Y|X)P(X)$\\
+        Chain rule of Probability: $P(x_1, x_2, \dots, x_n) = p(x_1)p(x_2|x_1)p(x_3|x_1,x_2) \dots P(x_n | x_1, \dots, x_{n-1})$
+        Independent: $P(X,Y) = P(X)P(Y)$\\
+        Expectation: $E(f(X)) = \sum f(x)p(x)$ or $\int f(x)p(x)dx$\\
+        Given $X\indep Y$, $E[XY] = E[X]E[Y] $ \\
+        iid r.v: independent and identically destributed
+
+        \item Maximum Likelihood Estimation (MLE):\\
+        $\theta^* = \argmax_{\theta}P_\theta(D)$ Under such $\theta^*$, probability of observing the given dataset is maximum.
+        $L(\theta) = P(D|\theta) = \prod P(x_i)$, maximize $L(\theta)$. Solve: $\frac{\partial log(L(\theta))}{\partial \theta}$
+
+        \item Logestic Regression:\\
+        $w\phi(x) > 0 \Rightarrow g(x) = 1, w\phi(x) \le 0 \Rightarrow g(x) = 0$ Then, we have the model: 
+        $$P(y = 1| x) = \delta(w^T\phi(x)) =\frac{1}{1 + e^{-w^T\phi(x)}}$$
+        \textbf{Training:}\\
+        Train through MLE $\max\limits_{w}P_w(D) = \max\limits_{w}P_w(y_1 | x_1) \cdots P_w(y_N | x_N) $\\
+        We can write: $P_w(y_i|x_i) = P_w(y_i = 1 | x_1)^{y_i} P_w(y_i = 0 | x_1)^{1 - y_i}$\\
+        $L(w) = logP_w(D) = \sum_{i = 1}^{N}log(\frac{1}{1 + e^{-w^T\phi(x_i)}})^{y_i} + log(\frac{1}{1 + e^{w^T\phi(x_i)}})^{1 -y_i} \\
+        = \sum_{i = 1}^{N}(y_iw^T\phi(x_i)) - log(1 + e^{w^T\phi(x_i)})$ 
+
+        equivilent to minimize $-L(w)$
+        
+        $\Rightarrow \argmin_w J(w) \sum_{i = 1}^{N}[-y_iw^T\phi(x_i) + log(1 + e^{w^T\phi(x_i)})]$ take derivitive:
+        $\frac{\partial J(w)}{\partial w} = \sum_{i = 1}^{N} -y_i\phi(x_i) + \phi(x_i)\frac{1}{1 + e^{-w^T\phi(x)}}$\\
+        No closed form, use GD.
+
+        \textbf{Deal with overfitting:} \\
+        Do regularization on $w$.\\
+        $\min_w \overbar{J}(w) = J(w) + \frac{\lambda}{2}||w||^2_2$\\
+        In GD, it is just $\frac{\partial \overbar{J}(w)}{\partial w} = \sum_{i = 1}^{N} \phi(x_i)(-y_i + \frac{1}{1 + e^{-w^T\phi(x)}}) + \lambda w$
+
+        % \item Maximum A Posteriori Estimation (MAP):\\
+        % We want to find the most likely $\theta$, given observations $D$. i.e. $\argmax_\theta P(\theta | D) = \frac{P(D | \theta)P(\theta)}{P(D)} \propto P(D|\theta)P(\theta)$
+    \end{enumerate}
+    \newpage
+\end{multicols}
+\end{document}
