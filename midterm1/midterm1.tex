@@ -57,7 +57,7 @@
         $\hat{\theta} = \argmin\limits_{\theta}\sum_i l(\theta^T\phi(x_i), y_i)$, $l$ is $l_2$-norm$^2$\\
         $\hat{\theta} = \argmin\limits_{\theta}\sum_i ||\theta^T\phi(x_i)- y_i||_2^2$\\
         Convex, let Derivitive = 0 $\Rightarrow \frac{\partial J(\theta)}{\partial \theta} = 0$ \\
-        $\sum_i 2(\theta^T\phi(x_i)-y_i)\phi(x_i) = 0 \Rightarrow \Phi^T\Phi\theta = X^TY$ \\
+        $\sum_i 2(\theta^T\phi(x_i)-y_i)\phi(x_i) = 0 \Rightarrow \Phi^T\Phi\theta = \Phi^TY$ \\
         Cost time: $O(d^3 + d^2N)$
         When not invertible: $n < d$\\
         since $rk(\Phi^T\Phi) < rk(\Phi) < \min\{n,d\}$, when $n < d$ we have $rk(\Phi^T\Phi)  = n < d$ then it is not-full rank.\\
