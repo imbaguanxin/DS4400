@@ -1,0 +1,111 @@
+\documentclass[12pt]{article}  
+\usepackage{graphicx}
+\usepackage{geometry}   %设置页边距的宏包
+\usepackage{algpseudocode}
+\usepackage{comment}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{framed}
+\usepackage{verbatim}
+\usepackage{microtype}
+\usepackage{kpfonts}
+\usepackage{multicol}
+\usepackage{amsfonts}
+\usepackage{array}
+\usepackage{color}
+\usepackage{pgf,tikz}
+\usepackage{mathtools}
+\usetikzlibrary{automata, positioning, arrows}
+\usepackage{wrapfig}
+\newcommand{\solu}{{\color{blue} Solution:}}
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+\newcommand{\Ib}{\mathbf{I}}
+\newcommand{\Pb}{\mathbf{P}}
+\newcommand{\Qb}{\mathbf{Q}}
+\newcommand{\Rb}{\mathbf{R}}
+\newcommand{\Nb}{\mathbf{N}}
+\newcommand{\Fb}{\mathbf{F}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\Lap}{\mathcal{L}}
+\newcommand{\Zplus}{\mathbf{Z}^+}
+\newcommand{\indep}{\perp \!\!\! \perp}
+\DeclareMathOperator*{\argmin}{\arg\min}
+\DeclareMathOperator*{\argmax}{\arg\max}
+\geometry{left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm}  %设置 上、左、下、右 页边距
+
+\title{DS4400 HW2}
+\author{Xin Guan}
+\date{}
+
+
+\begin{document}
+    \begin{enumerate}
+        \item \begin{enumerate}
+            \item \solu
+            
+            we write $P(X = x) = \theta^x(1-\theta)^{(1-x)}$\\
+            $P(D | \theta) = P(X_1 = x_1, X_2 = x_2 \dots, X_N= x_N)\\
+            = \prod\limits_{x = 1}^{N}\theta^x_i(1-\theta)^{(1-x_i)}\\
+            = \theta^{N_1}(1-\theta)^{N_0}$\\
+            Let $J(\theta) = logP(D | \theta) = N_1log(\theta) + N_0log(1 - \theta)$\\
+            $\frac{\partial J(\theta)}{\partial \theta} = \frac{N_1}{\theta} - \frac{N_0}{1 - \theta}$.
+            Let $\frac{\partial J(\theta)}{\partial \theta} = 0$.\\
+            Then $\hat{\theta} = \frac{N_1}{N_0 + N_1} = \frac{N_1}{N}$\\
+            Therefore, the maximum likelihood solution is $\hat{\theta} = \frac{N_1}{N}$
+
+            \item \solu 
+            
+            $p(D | \theta) \times p(\theta) =  \left\{
+                \begin{array}{rcl}
+                0.2\cdot 0.6^{N_1} \cdot 0.4^{N_0}  & & \theta = 0.6 \\
+                0.8\cdot 0.8^{N_1} \cdot 0.2^{N_0} & & \theta = 0.8 \\
+                0 & & \text{otherwise}
+            \end{array}
+            \right.$\\
+            $\frac{P(D|0.6)P(0.6)}{P(D|0.8)P(0.8)} = \frac{1}{4}(\frac{3}{4})^{N_1}(2)^{N_0} = 3^{N_1}4^{-N_1-1}2^{N_0} = 2^{N_1log_2^3}2^{-2N_1 - 2}2^{N_0} = 2^{N_0 - (2-log_2^3)N_1 - 2}$\\
+            Therefore, when $\frac{P(D|0.6)P(0.6)}{P(D|0.8)P(0.8)} \ge 1:$\\
+            $N_0 -(2-log_2^3)N_1 -2 \ge 0 \Rightarrow N_0 \ge (2-log_2^3)N_1 +2$\\
+            Therefore, $\hat{\theta} = \left\{
+                \begin{array}{rcl}
+                0.6 & & N_0 \ge (2-log_2^3)N_1 +2 \\
+                0.8 & & N_0 < (2-log_2^3)N_1 +2
+            \end{array}
+            \right.$
+        \end{enumerate}
+
+        \item \begin{enumerate}
+            \item \solu 
+        
+            $\theta^y_j = \left\{
+                \begin{array}{rcl}
+                    \frac{3}{7} & & j = 0\\
+                    \frac{4}{7} & & j = 1
+                \end{array}
+            \right.$\\
+            $\theta^{x_\ell | y}_{\overbar{x}_\ell | j} = \left\{
+                \begin{array}{rcl}
+                    \frac{1}{3} & & x_1 = 1, j = 0\\
+                    \frac{2}{3} & & x_1 = 0, j = 0\\
+                    \frac{1}{3} & & x_2 = 1, j = 0\\
+                    \frac{2}{3} & & x_2 = 0, j = 0\\
+                    \frac{1}{2} & & x_1 = 1, j = 1\\
+                    \frac{1}{2} & & x_1 = 0, j = 1\\
+                    \frac{1}{2} & & x_2 = 1, j = 1\\
+                    \frac{1}{2} & & x_2 = 0, j = 1
+                \end{array}
+            \right.$
+
+            \item \solu 
+            
+            $P(y = 0 | x_1 = 0, x_2 = 1)\\
+            = \frac{P(x_1 = 0, x_2 = 1 | y = 0)P(y = 0)}{P(x_1 = 0, x_2 = 1)}\\
+            = \frac{P(x_1 = 0| y = 0)P(x_2 = 1| y = 0)P(y = 0)}{P(x_1 = 0, x_2 = 1)}\\
+            = \frac{\theta^{x_1 | y}_{0 | 0}\theta^{x_2 | y}_{1 | 0}\theta^y_0}{P(x_1 = 0, x_2 = 1)}\\
+            = \frac{2}{3} \cdot \frac{1}{3} \cdot \frac{3}{7}  / \frac{2}{7}\\
+            = \frac{1}{3}$
+        \end{enumerate}
+
+        
+    \end{enumerate}    
+\end{document}
