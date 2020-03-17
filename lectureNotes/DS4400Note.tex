@@ -620,42 +620,73 @@
             $O(Lmd)$
         \end{enumerate}
 
-        \title{Generative Modeling}\\
-        \maketitle\\
+        \title{Generative Modeling}
+        \maketitle
+
         \textbf{Classification:} 
         \begin{itemize}
             \item Discriminative: $P(y|x) = \frac{1}{1 + e^{-w^t\phi(x_i)}}$
             \item Generative: $P(x | y), P(y)$ to see which normal distribution generates the data.
         \end{itemize}
+        
         Learning to firgure out parameter of $p(x|y), p(y)$:
+        
         \begin{itemize}
             \item $\theta_j^y \triangleq P(y = j)$
             \item $\theta_{\overbar{x} | y}^{x|y} \triangleq P(x = \overbar{x} | y = j)$
         \end{itemize}
-        Estimate data using $D = \{(x_1, y_1), (x_2, y_2) \dots, (x_L, y_L)\}$\\
-        Use MLE:\\
-        Training time: $O(Lm^d)$, $d$ is dimension of feature, $m$ is number of possible values of each feature.\\
-        \textbf{Naive Bayes assumption:}\\
-        features are independent given a class. \\
-        $P(x = \overbar{x} | y = j) = P(x_1 = \overbar{x_1}|y = j)P(x_2 = \overbar{x_2}|y = j)P(x_3 = \overbar{x_3}|y = j) \dots P(x = \overbar{x_d}|y = j)$\\
-        $\equiv  \theta^{x | y}_{\overbar{x} | y} = \theta^{x_1 | y}_{\overbar{x_1} | j}\theta^{\overbar{x_2} | y}_{x_2 | j} \dots \theta^{\overbar{x_d} | y}_{x_d | j}$\\
-        $\hat{\theta}_j^y = \sum_{i=1}^{L}1(y^i=j)/L$\\
-        $\hat{\theta}_{\overbar{x}|j}^{x|y} = \frac{\sum\limits_{i = 1}^L1(x_i = \overbar{x}, y_i = j)}{\sum\limits_{i = 1}^{L}1(y_i = j)}$\\
+        
+        Estimate data using $D = \{(x_1, y_1), (x_2, y_2) \dots, (x_L, y_L)\}$
+        
+        Use MLE:
+        
+        Training time: $O(Lm^d)$, $d$ is dimension of feature, $m$ is number of possible values of each feature.
+
+        \textbf{Naive Bayes assumption:}
+
+        features are independent given a class.
+
+        $P(x = \overbar{x} | y = j) = P(x_1 = \overbar{x_1}|y = j)P(x_2 = \overbar{x_2}|y = j)P(x_3 = \overbar{x_3}|y = j) \dots P(x = \overbar{x_d}|y = j)$
+
+        $\equiv  \theta^{x | y}_{\overbar{x} | y} = \theta^{x_1 | y}_{\overbar{x_1} | j}\theta^{\overbar{x_2} | y}_{x_2 | j} \dots \theta^{\overbar{x_d} | y}_{x_d | j}$
+
+        $\hat{\theta}_j^y = \sum_{i=1}^{L}1(y^i=j)/L$
+
+        $\hat{\theta}_{\overbar{x}|j}^{x|y} = \frac{\sum\limits_{i = 1}^L1(x_i = \overbar{x}, y_i = j)}{\sum\limits_{i = 1}^{L}1(y_i = j)}$
+
         Total running time: $O(Lmd)$
-        However, \textbf{Unseen cases is going to lead to 0 probability}\\
-        We need to put some "fake data" in the data set:\\
-        $\hat{\theta}^{x_l|y}_{\overbar{x_l}|j} = \frac{\sum(x_l^i= \overbar{x_l}, y_i = ) + t}{\sum 1(y_i = j) + tm}$\\
-        For each case, we added t fake data, we need to add $tm$ on the denominator since totally we added $tm$ data entry.\\
-        Gaussian Naive Bayes\\
+
+        However, \textbf{Unseen cases is going to lead to 0 probability}
+
+        We need to put some "fake data" in the data set:
+
+        $\hat{\theta}^{x_l|y}_{\overbar{x_l}|j} = \frac{\sum(x_l^i= \overbar{x_l}, y_i = ) + t}{\sum 1(y_i = j) + tm}$
+
+        For each case, we added t fake data, we need to add $tm$ on the denominator since totally we added $tm$ data entry.
+
+        Gaussian Naive Bayes
+
         $x = \begin{pmatrix}
             x_1 \\ x_2 \\ \vdots
         \end{pmatrix}$
-        Each $x_i$ is a gaussian distribution: $(\mu_i, \sigma_i^2)$\\
-        $\mu_{1,j} = \frac{\sum x_i 1(y_i = j)}{\sum 1(y_i = j)}$\\
-        $\mu_{l,j} = \frac{\sum x_l 1(y_i = j)}{\sum 1(y_i = j)}$\\
-        $\sigma_{l,j} = \frac{\sum (x_l^i - \mu_{l,j})^2 1(y_i = j)}{\sum 1(y_i = j)}$\\
 
-        \textbf{Convex Set} \defi: A set $S \subseteq R^d$ is convex iff $\forall x_1, x_2 \in S, \forall \alpha \in [0,1]$, we have $\alpha x_1 + (1-\alpha)x_2 \in S$ 
+        Each $x_i$ is a gaussian distribution: $(\mu_i, \sigma_i^2)$
+
+        $\mu_{1,j} = \frac{\sum x_i 1(y_i = j)}{\sum 1(y_i = j)}$
+
+        $\mu_{l,j} = \frac{\sum x_l 1(y_i = j)}{\sum 1(y_i = j)}$
+
+        $\sigma_{l,j} = \frac{\sum (x_l^i - \mu_{l,j})^2 1(y_i = j)}{\sum 1(y_i = j)}$
+        
+        \textbf{Convex Set:} 
+        
+        \defi: A set $S \subseteq R^d$ is convex iff $\forall x_1, x_2 \in S, \forall \alpha \in [0,1]$, we have $\alpha x_1 + (1-\alpha)x_2 \in S$ 
+        
+
+        \title{DS4400 Notes 03/13}
+        \maketitle
+
+        \textbf{Decision Trees:}
         
         % \newpage
     % \end{multicols}

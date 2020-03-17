@@ -76,13 +76,13 @@
                 0 & & \text{otherwise}
             \end{array}
             \right.$\\
-            $\frac{P(D|0.6)P(0.6)}{P(D|0.8)P(0.8)} = \frac{1}{4}(\frac{3}{4})^{N_1}(2)^{N_0} = 3^{N_1}4^{-N_1-1}2^{N_0} = 2^{N_1log_2^3}2^{-2N_1 - 2}2^{N_0} = 2^{N_0 - (2-log_2^3)N_1 - 2}$\\
+            $\frac{P(D|0.6)P(0.6)}{P(D|0.8)P(0.8)} = \frac{1}{4}(\frac{3}{4})^{N_1}(2)^{N_0} = 3^{N_1}4^{-N_1-1}2^{N_0} = 2^{N_1log_23}2^{-2N_1 - 2}2^{N_0} = 2^{N_0 - (2-log_23)N_1 - 2}$\\
             Therefore, when $\frac{P(D|0.6)P(0.6)}{P(D|0.8)P(0.8)} \ge 1:$\\
-            $N_0 -(2-log_2^3)N_1 -2 \ge 0 \Rightarrow N_0 \ge (2-log_2^3)N_1 +2$\\
+            $N_0 -(2-log_23)N_1 -2 \ge 0 \Rightarrow N_0 \ge (2-log_23)N_1 +2$\\
             Therefore, $\hat{\theta} = \left\{
                 \begin{array}{rcl}
-                0.6 & & N_0 \ge (2-log_2^3)N_1 +2 \\
-                0.8 & & N_0 < (2-log_2^3)N_1 +2
+                0.6 & & N_0 \ge (2-log_23)N_1 +2 \\
+                0.8 & & N_0 < (2-log_23)N_1 +2
             \end{array}
             \right.$
         \end{enumerate}
@@ -131,11 +131,11 @@
             \solu 
             
             $P(y = 0 | x_1 = 0, x_2 = 1)\\
-            = \frac{P(x_1 = 0, x_2 = 1 | y = 0)P(y = 0)}{P(x_1 = 0, x_2 = 1)}\\
-            = \frac{P(x_1 = 0| y = 0)P(x_2 = 1| y = 0)P(y = 0)}{P(x_1 = 0, x_2 = 1)}\\
-            = \frac{\theta^{x_1 | y}_{0 | 0}\theta^{x_2 | y}_{1 | 0}\theta^y_0}{P(x_1 = 0, x_2 = 1)}\\
-            = \frac{2}{3} \cdot \frac{1}{3} \cdot \frac{3}{7}  / \frac{2}{7}\\
-            = \frac{1}{3}$
+            = \frac{P(x_1 = 0, x_2 = 1 | y = 0)P(y = 0)}{P(x_1 = 0, x_2 = 1 | y= 0)P(y = 0) + P(x_1 = 0, x_2 = 1 |y = 1)P(y = 1)}\\
+            = \frac{P(x_1 = 0| y = 0)P(x_2 = 1| y = 0)P(y = 0)}{P(x_1 = 0| y= 0)P(x_2 = 1| y= 0)P(y = 0) + P(x_1 = 0| y= 1)P(x_2 = 1| y= 1)P(y = 1)}\\
+            = \frac{\theta^{x_1 | y}_{0 | 0}\theta^{x_2 | y}_{1 | 0}\theta^y_0}{\theta^{x_1 | y}_{0 | 0}\theta^{x_2 | y}_{1 | 0}\theta^y_0 + \theta^{x_1 | y}_{0 | 1}\theta^{x_2 | y}_{1 | 1}\theta^y_1}\\
+            = \frac{\frac{2}{3} \cdot \frac{1}{3} \cdot \frac{3}{7}}{\frac{2}{3} \cdot \frac{1}{3} \cdot \frac{3}{7} + \frac{2}{4} \cdot \frac{2}{4} \cdot \frac{4}{7}}\\
+            = \frac{2}{5}$
 
             \item What would be the solution of the previous part without the naive Bayes assumption?
             
@@ -209,8 +209,9 @@
             \solu 
 
             If there is no constraint $\omega^T\theta = b$, it is just $\min\limits_\theta \frac{1}{2}||\mathbf{y} - \mathbf{X\theta}||^2_2$.\\
-            Then $\frac{\partial \frac{1}{2}||\mathbf{y} - \mathbf{X\theta}||^2_2}{\partial \theta} = \theta - X^Ty$. Let it to be 0.\\
-            Then $\theta^* = X^Ty$
+            Then $\frac{\partial \frac{1}{2}||\mathbf{y} - \mathbf{X\theta}||^2_2}{\partial \theta} = X^TX\theta - X^Ty$. Let it to be 0.\\
+            Then $\theta^* = (X^TX)^{-1}X^Ty$\\
+            If we still preserve the assumption in problem $a$ where $X^TX = I^k$, $\theta^* = X^Ty$
 
 
             
