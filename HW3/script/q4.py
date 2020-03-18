@@ -40,14 +40,18 @@ def main():
     d1.pop('__header__')
     d1.pop('__version__')
     d1.pop('__globals__')
-    # print(d1)
-    X = d1["X_trn"]
-    y = d1["Y_trn"].T[0]
-    res, w, b = logisticReg(X, y)
-    score = res.score(np.concatenate([X, np.ones((X.shape[0], 1))], axis=1), y)
-    print("Error: {}".format(score))
+    x_trn = d1["X_trn"]
+    y_trn = d1["Y_trn"].T[0]
+    x_tst = d1["X_tst"]
+    y_tst = d1["Y_tst"].T[0]
+    res, w, b = logisticReg(x_trn, y_trn)
+    trn_score = res.score(np.concatenate([x_trn, np.ones((x_trn.shape[0], 1))], axis=1), y_trn)
+    tst_score = res.score(np.concatenate([x_tst, np.ones((x_tst.shape[0], 1))], axis=1), y_tst)
+    print("trn error: {}".format(trn_score))
+    print("tst error: {}".format(tst_score))
     print("w: {}, b: {}".format(w, b))
-    data_plot(X, y, w, b, "trn")
+    data_plot(x_trn, y_trn, w, b, "q4 trn")
+    data_plot(x_tst, y_tst, w, b, "q4 tst")
 
 
 if __name__ == "__main__":
