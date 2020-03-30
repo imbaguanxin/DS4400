@@ -1,0 +1,77 @@
+\documentclass[12pt]{article}  
+\usepackage{graphicx}
+\usepackage{geometry}   %设置页边距的宏包
+\usepackage{algpseudocode}
+\usepackage{comment}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{framed}
+\usepackage{verbatim}
+\usepackage{microtype}
+\usepackage{kpfonts}
+\usepackage{multicol}
+\usepackage{amsfonts}
+\usepackage{array}
+\usepackage{color}
+\usepackage{pgf,tikz}
+\usepackage{mathtools}
+\usetikzlibrary{automata, positioning, arrows}
+\usepackage{wrapfig}
+\newcommand{\solu}{{\color{blue} Solution:}}
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+\newcommand{\Ib}{\mathbf{I}}
+\newcommand{\Pb}{\mathbf{P}}
+\newcommand{\Qb}{\mathbf{Q}}
+\newcommand{\Rb}{\mathbf{R}}
+\newcommand{\Nb}{\mathbf{N}}
+\newcommand{\Fb}{\mathbf{F}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\Lap}{\mathcal{L}}
+\newcommand{\Zplus}{\mathbf{Z}^+}
+\newcommand{\indep}{\perp \!\!\! \perp}
+\DeclareMathOperator*{\argmin}{\arg\min}
+\DeclareMathOperator*{\argmax}{\arg\max}
+\geometry{left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm}  %设置 上、左、下、右 页边距
+
+\title{DS4400 HW4}
+\author{Xin Guan}
+\date{}
+
+\begin{document}
+    \maketitle
+    \begin{enumerate}
+        \item \textbf{SVM}. Consider a supervised learning problem in which the training examples are points in 2-dimensional space. The positive examples (samples in class 1) are $(1, 1)$ and $(-1, -1)$. The negative examples (samples in class 0) are $(1, -1)$ and $(-1, 1)$. Are the positive examples linearly separable from the negative examples in the original space? If so, give the coefficients of $\omega$.
+        \begin{enumerate}
+            \item For the example above, consider the feature transformation $\phi(x) = [1, x_1, x_2, x_1x_2]$, where $x_1$ and $x_2$ are, respectively, the first and second coordinates of a generic example $x$. Can we find a hyperplance $\omega^T\phi(x)$ in this feature space that can separate the data from positive and negative class. If so, give the coefficients of $\omega$ (You should be able to do this by inspection, without significant computation).
+            
+            \solu 
+
+            We find that when $x_1, x_2$ have the same sign, they belong to +. If $x_1, x_2$ have different sign, they belong to $-$ Therefore, we can use $x_1x_2$ to decide its category. Then we can pick $\omega = [0,0,0,1]$.
+
+            \item What is the kernel corresponding to the feature map $\phi(\cdot)$ in the last part. In other words provde the kernel function $K(x,z) = \mathbb{R}^2 \times \mathbb{R}^2 \rightarrow \mathbb{R}$
+            
+            \solu 
+
+            $K(x,z) = [1,x_1, x_2, x_1x_2]^T\cdot[1,z_1,z_2,z_1z_2] = 1 +x_1z_1 + x_2z_2 + x_1x_2z_1z_2 = 1 + xz + \frac{(xz)^2 - ||xz||_2^2}{2}$
+            
+        \end{enumerate}
+
+        \item \textbf{Neural Network} Consider a neural net for a binary classification which has one hidden layer as shown in the figure below. We use a linear activation function $a(z) = cz$ at hidden units and a sigmoid activation function $a(z) = 1/(1 + e^{-z})$ at the output unit to learn the function for $P(y = 1|x, w)$ where $x = (x_1, x_2)$ and $w = (w_1, w_2, \dots , w_9)$.
+        \begin{enumerate}
+            \item What is the output $P(y = 1|x, w)$ from the above neural net? Express it in terms of $x_i, $c and weights $w_i$. What is the final classification boundary?
+            
+            \solu 
+
+            For first neuron of the hidden level we have $A = a_1(w_1 + x_1w_3 + x_2w_5) = c(w_1 + x_1w_3 + x_2w_5)$. For the second neuron of the hidden level: $B = a_1(w_2 + x_1w_4 + x_2w_6) = c(w_2 + x_1w_4 + x_2w_6)$. 
+            
+            Then the output neuron is $a_2(w_7 + w_8A + w_9B) = \frac{1}{(1 + e^{-(w_7 + w_8(c(w_1 + x_1w_3 + x_2w_5)) + w_9(c(w_2 + x_1w_4 + x_2w_6)))})}$
+
+            The boundary: let $w_7 + w_8A + w_9B = 0$.
+            Then we have $w_7 + w_8(c(w_1 + x_1w_3 + x_2w_5)) + w_9(c(w_2 + x_1w_4 + x_2w_6)) = 0$
+            \item Draw a neural net with no hidden layer which is equivalent to the given neural net, and write weights $\tilde{w}$ of this new neural net in terms of $c$ and $w_i$.
+            \item Is it true that any multi-layered neural net with linear activation functions at hidden layers can be represented as a neural net without any hidden layer? Explain your answer.
+                        
+        \end{enumerate}
+    \end{enumerate}
+\end{document}
