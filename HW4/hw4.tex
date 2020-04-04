@@ -33,7 +33,13 @@
 \DeclareMathOperator*{\argmin}{\arg\min}
 \DeclareMathOperator*{\argmax}{\arg\max}
 \geometry{left=1.5cm,right=1.5cm,top=1.5cm,bottom=1.5cm}  %设置 上、左、下、右 页边距
-
+\tikzset{
+    ->, % makes the edges directed
+    >=stealth, % makes the arrow heads bold
+    node distance=3cm, % specifies the minimum distance between two nodes. Change if necessary.
+    every state/.style={thick, fill=gray!10}, % sets the properties for each ’state’ node
+    initial text=$ $, % sets the text that appears on the start arrow
+} 
 \title{DS4400 HW4}
 \author{Xin Guan}
 \date{}
@@ -63,14 +69,48 @@
             
             \solu 
 
-            For first neuron of the hidden level we have $A = a_1(w_1 + x_1w_3 + x_2w_5) = c(w_1 + x_1w_3 + x_2w_5)$. For the second neuron of the hidden level: $B = a_1(w_2 + x_1w_4 + x_2w_6) = c(w_2 + x_1w_4 + x_2w_6)$. 
+            For the first neuron of the hidden level: $A = a_1(w_1 + x_1w_3 + x_2w_5) = c(w_1 + x_1w_3 + x_2w_5)$. For the second neuron of the hidden level: $B = a_1(w_2 + x_1w_4 + x_2w_6) = c(w_2 + x_1w_4 + x_2w_6)$. 
             
             Then the output neuron is $a_2(w_7 + w_8A + w_9B) = \frac{1}{(1 + e^{-(w_7 + w_8(c(w_1 + x_1w_3 + x_2w_5)) + w_9(c(w_2 + x_1w_4 + x_2w_6)))})}$
 
             The boundary: let $w_7 + w_8A + w_9B = 0$.
-            Then we have $w_7 + w_8(c(w_1 + x_1w_3 + x_2w_5)) + w_9(c(w_2 + x_1w_4 + x_2w_6)) = 0$
+            Then we have 
+            $$w_7 + w_8(c(w_1 + x_1w_3 + x_2w_5)) + w_9(c(w_2 + x_1w_4 + x_2w_6)) = 0$$
+            Or we formulate it as:
+            $$(w_8w_3 + w_9w_4)cx_1 + (w_8w_5 +w_9w_6)cx_2 + w_7 + w_1w_8c + w_9w_2c = 0$$
+            Therefore,
+            $y = \left\{
+                \begin{array}{rcl}
+                1  & & (w_8w_3 + w_9w_4)cx_1 + (w_8w_5 +w_9w_6)cx_2 + w_7 + w_1w_8c + w_9w_2c > 0 \\
+                0 & & (w_8w_3 + w_9w_4)cx_1 + (w_8w_5 +w_9w_6)cx_2 + w_7 + w_1w_8c + w_9w_2c < 0
+            \end{array}
+            \right.$
+
             \item Draw a neural net with no hidden layer which is equivalent to the given neural net, and write weights $\tilde{w}$ of this new neural net in terms of $c$ and $w_i$.
+            
+            \solu 
+
+            \begin{center}
+                \begin{tikzpicture}
+                    \node[state] (1) {+1};
+                    \node[state, below of=1] (x1) {$x_1$};
+                    \node[state, below of=x1] (x2) {$x_2$};
+                    \node[state, right of=x1, node distance=6cm] (o) {out};
+                    \node[state, right of=o, draw=none, node distance=2cm, fill=white] (y) {};
+                    \draw (1) edge[above right] node{$w_7 + w_1w_8c + w_9w_2c$} (o)
+                    (1) edge[above right] node{$w_7 + w_1w_8c + w_9w_2c$} (o)
+                    (x1) edge[above] node{$w_7 + w_1w_8c + w_9w_2c$} (o)
+                    (x2) edge[below right] node{$w_7 + w_1w_8c + w_9w_2c$} (o)
+                    (o) edge[below right] node{$ $} (y);
+                \end{tikzpicture}
+            \end{center}
+
+            The out node is using a sigmoid function.
             \item Is it true that any multi-layered neural net with linear activation functions at hidden layers can be represented as a neural net without any hidden layer? Explain your answer.
+            
+            \solu
+
+            It is true. linear activation functions is applying linear transformations on the inputs. Therefore, no mather how many layers it have, it is still a linear combination of the inputs. i.e. we can finally formulate the output to be something like $(\dots)x_1 + (\dots)x_2 + C$, where $C$ is some constant. Therefore, we can use a neural network with no hidden layer to directly map to the output layer.
                         
         \end{enumerate}
     \end{enumerate}
